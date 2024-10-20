@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfead3c118916a448899d86bddcbf4a, type: 3}
+  m_Name: MeleeTower
+  m_EditorClassIdentifier: 
+  towerTypeName: Melee Tower
+  attackType: {fileID: 11400000, guid: 75f0fbbd318de7e42b9a699dc33741f1, type: 2}
+  towerModel:
+  - {fileID: 3495206144695972096, guid: 45eb0d58aee251f4a8910000b407fdc7, type: 3}
+  - {fileID: 8049520091743909114, guid: e4b765c434a8f884a9b8931f061b551d, type: 3}
+  - {fileID: 5534698141590473859, guid: 9235e87af043f8e4fb09e382b0eddf75, type: 3}
+  damage:
+  - 5
+  - 7
+  - 10
+  range:
+  - 100
+  - 120
+  - 150
+  attackCooldown:
+  - 2
+  - 1.75
+  - 1.5
