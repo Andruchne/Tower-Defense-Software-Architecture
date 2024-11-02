@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AOEDamage
   m_EditorClassIdentifier: 
   attackType: AOE Damage
-  attackTypeDescription: Enemies within a specific radius of the impact, get hit
+  attackTypeDescription: Targets within a specific radius of the impact, get hit
     as well

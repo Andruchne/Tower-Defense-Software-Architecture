@@ -23,10 +23,14 @@ MonoBehaviour:
   - 7
   - 10
   range:
-  - 100
-  - 120
-  - 150
+  - 2
+  - 2.5
+  - 3
   attackCooldown:
   - 2
   - 1.75
   - 1.5
+  effectRadius:
+  - 1
+  - 1
+  - 1

@@ -8,6 +8,7 @@ public class TowerInfoEditor : Editor
     private SerializedProperty _damageProp;
     private SerializedProperty _rangeProp;
     private SerializedProperty _attackCooldownProp;
+    private SerializedProperty _effectRadiusProp;
 
     private void OnEnable()
     {
@@ -15,6 +16,12 @@ public class TowerInfoEditor : Editor
         _damageProp = serializedObject.FindProperty("damage");
         _rangeProp = serializedObject.FindProperty("range");
         _attackCooldownProp = serializedObject.FindProperty("attackCooldown");
+        _effectRadiusProp = serializedObject.FindProperty("effectRadius");
+
+        // To synchronize existing scriptableObjects, whenever new values get added
+        serializedObject.Update();
+        MatchArraySizes();
+        serializedObject.ApplyModifiedProperties();
     }
 
     public override void OnInspectorGUI()
@@ -51,6 +58,7 @@ public class TowerInfoEditor : Editor
             _damageProp.arraySize = newSize;
             _rangeProp.arraySize = newSize;
             _attackCooldownProp.arraySize = newSize;
+            _effectRadiusProp.arraySize = newSize;
         }
     }
 
@@ -64,6 +72,7 @@ public class TowerInfoEditor : Editor
         EditorGUILayout.LabelField("Damage", GUILayout.Width(100));
         EditorGUILayout.LabelField("Range", GUILayout.Width(100));
         EditorGUILayout.LabelField("Attack Cooldown", GUILayout.Width(100));
+        EditorGUILayout.LabelField("Effect Radius", GUILayout.Width(100));
         EditorGUILayout.LabelField("", GUILayout.Width(100)); // Placeholder for the "Remove" button
         EditorGUILayout.EndHorizontal();
     }
@@ -78,6 +87,7 @@ public class TowerInfoEditor : Editor
         EditorGUILayout.PropertyField(_damageProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
         EditorGUILayout.PropertyField(_rangeProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
         EditorGUILayout.PropertyField(_attackCooldownProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
+        EditorGUILayout.PropertyField(_effectRadiusProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
 
         // Button to remove elements from all arrays
         if (GUILayout.Button("Remove", GUILayout.Width(60)))
@@ -86,6 +96,7 @@ public class TowerInfoEditor : Editor
             _damageProp.DeleteArrayElementAtIndex(i);
             _rangeProp.DeleteArrayElementAtIndex(i);
             _attackCooldownProp.DeleteArrayElementAtIndex(i);
+            _effectRadiusProp.DeleteArrayElementAtIndex(i);
         }
 
         EditorGUILayout.EndHorizontal();
@@ -98,6 +109,7 @@ public class TowerInfoEditor : Editor
         _damageProp.arraySize++;
         _rangeProp.arraySize++;
         _attackCooldownProp.arraySize++;
+        _effectRadiusProp.arraySize++;
     }
 
     CheckForNullElements();
@@ -107,7 +119,7 @@ public class TowerInfoEditor : Editor
     {
         for (int i = 0; i < _towerModelProp.arraySize; i++)
         {
-            // Check if towerModel
+            // Check if towerModel is not assigned
             if (_towerModelProp.GetArrayElementAtIndex(i).objectReferenceValue == null)
             {
                 EditorGUILayout.HelpBox($"towerModel at index {i} is null.", MessageType.Error);

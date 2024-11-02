@@ -13,4 +13,5 @@ public class AttackType : ScriptableObject
 {
     public string attackType;
     public string attackTypeDescription;
+    public GameObject projectile;
 }

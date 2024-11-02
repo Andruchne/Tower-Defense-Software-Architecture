@@ -16,4 +16,5 @@ public class TowerInfo : ScriptableObject
     public float[] damage;
     public float[] range;
     public float[] attackCooldown;
+    public float[] effectRadius;
 }
