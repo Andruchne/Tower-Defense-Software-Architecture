@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Debuff
   m_EditorClassIdentifier: 
   attackType: Debuff
-  attackTypeDescription: Applies random debuffs to an area, aimed at the first target
-    to come in range
+  attackTypeDescription: Applies random debuffs to an area
+  projectile: {fileID: 0}

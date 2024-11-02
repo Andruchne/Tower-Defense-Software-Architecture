@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,15 +28,23 @@ public class Enemy : MonoBehaviour, ITargetable
         moveBehaviour.Move(moveSpeed);
     }
 
-    public void GetHit()
+    public void Hit()
     {
 
     }
 
-    public void GetDestroyed()
+    public void Destroyed()
     {
 
     }
 
-    
+    public Vector3 GetNextPosition(float timeInSeconds)
+    {
+        Vector3 currentVelocity = moveBehaviour.GetCurrentVelocity();
+        float distance = currentVelocity.magnitude * timeInSeconds;
+
+        Vector3 predictedPosition = transform.position + currentVelocity.normalized * distance;
+
+        return predictedPosition;
+    }
 }

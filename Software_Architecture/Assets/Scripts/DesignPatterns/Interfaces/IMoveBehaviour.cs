@@ -6,4 +6,5 @@ using UnityEngine;
 public interface IMoveBehaviour
 {
     void Move(float speed = 1);
+    Vector3 GetCurrentVelocity();
 }
