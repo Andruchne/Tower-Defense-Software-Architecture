@@ -8,6 +8,13 @@ public class Projectile : MonoBehaviour
 
     [SerializeField] GameObject impactPrefab;
 
+    private CurrentTower _currentTower;
+
+    public void Initialize(CurrentTower currentTower)
+    {
+        _currentTower = currentTower;
+    }
+
     public void Shoot(Vector3 targetPos, ProjectileMoveType moveType, float duration)
     {
         switch (moveType)
@@ -30,16 +37,16 @@ public class Projectile : MonoBehaviour
         if (impactPrefab != null)
         {
             // Ground height is 0.2, we're assuming it stays this way
-            Instantiate(
+            Impact impact = Instantiate(
                 impactPrefab,
                 new Vector3(transform.position.x, 0.2f, transform.position.z),
                 Quaternion.identity,
-                null);
+                null).GetComponent<Impact>();
+
+            if (impact != null) { impact.Initialize(_currentTower); }
+            else { Debug.LogError("Impact Prefab " + impactPrefab.name + ": Prefab has no impact script attached"); }
         }
-        else
-        {
-            Debug.LogError("Projectile Prefab " + gameObject.name + ": Prefab has no impact prefab attached");
-        }
+        else { Debug.LogError("Projectile Prefab " + gameObject.name + ": Prefab has no impact prefab attached"); }
 
         Destroy(gameObject);
     }
@@ -60,34 +67,34 @@ public class Projectile : MonoBehaviour
 
     public void MoveCurved(Vector3 targetPos, float duration)
     {
-        // Variable could be exposed, but no need for it for our purposes 
-        float curveHeight = 0.5f;
-
+        float curveHeight = 1.0f;
         Vector3 startPos = transform.position;
 
-        // Horizontal movmement
-        LeanTween.move(gameObject, targetPos, duration).setEase(LeanTweenType.linear);
-
-        // Vertical movement for the curve
-        LeanTween.value(gameObject, startPos.y, targetPos.y, duration).setOnUpdate((float y) =>
+        // Use LeanTween to animate the position and rotation
+        LeanTween.value(gameObject, 0, 1, duration).setOnUpdate((float t) =>
         {
-            Vector3 pos = transform.position;
+            // Calculate position with parabolic curve
+            Vector3 pos = Vector3.Lerp(startPos, targetPos, t);
+            float parabola = 4 * curveHeight * t * (1 - t);
+            pos.y = Mathf.Lerp(startPos.y, targetPos.y, t) + parabola;
 
-            // Calculate the height for the curve
-            float height = Mathf.Sin(Mathf.PI * (pos.x - startPos.x) / (targetPos.x - startPos.x)) * curveHeight;
-            transform.position = new Vector3(pos.x, startPos.y + height, pos.z);
+            // Update the position
+            transform.position = pos;
 
-            Vector3 direction = (targetPos - transform.position).normalized;
+            // Calculate direction based on the movement of `t` along the curve
+            Vector3 nextPos = Vector3.Lerp(startPos, targetPos, t + Time.deltaTime / duration);
+            float nextParabola = 4 * curveHeight * (t + Time.deltaTime / duration) * (1 - (t + Time.deltaTime / duration));
+            nextPos.y = Mathf.Lerp(startPos.y, targetPos.y, t + Time.deltaTime / duration) + nextParabola;
 
+            // Look towards the next position on the curve
+            Vector3 direction = (nextPos - pos).normalized;
             if (direction != Vector3.zero)
             {
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
-                Quaternion xAxisRotation = Quaternion.Euler(-30, 0, 0);
-
-                transform.rotation = targetRotation * xAxisRotation;
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
             }
-        }).setEase(LeanTweenType.easeOutQuad)
-        // Execute Impact() when move is finished
+        }).setEase(LeanTweenType.linear)
         .setOnComplete(() => { Impact(); });
     }
+
 }

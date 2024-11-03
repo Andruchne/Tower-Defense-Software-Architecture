@@ -8,6 +8,8 @@ public class TowerSlot : MonoBehaviour
     [SerializeField] GameObject towerMenuPrefab;
     [SerializeField] Vector3 offset;
 
+    [SerializeField] GameObject towerPrefab;
+
     // To position the menu correctly
     private Camera _camera;
     private GameObject _currentMenuCanvas;
@@ -129,7 +131,22 @@ public class TowerSlot : MonoBehaviour
 
     private void TowerSelected(TowerInfo towerInfo)
     {
-        Instantiate(towerInfo.towerModel[0], transform.position, Quaternion.identity);
+        // Instantiate tower holder
+        Transform towerHolder = Instantiate(
+            towerPrefab,
+            transform.position,
+            Quaternion.identity).transform;
+
+        // Instantiate tower model seperately and add to tower holder
+        Instantiate(
+            towerInfo.towerModel[0],
+            transform.position,
+            Quaternion.identity,
+            towerHolder);
+
+        Tower tower = towerHolder.GetComponent<Tower>();
+        tower.Initialize(towerInfo);
+
         Destroy(gameObject);
     }
 }

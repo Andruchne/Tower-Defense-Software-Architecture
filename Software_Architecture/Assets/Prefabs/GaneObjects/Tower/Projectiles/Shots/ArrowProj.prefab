@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97173dfe0d1ac7b4e9a5b2139862ca0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  impactPrefab: {fileID: 0}
+  impactPrefab: {fileID: 5349780027404496270, guid: db8f2f9325f83bb4c8b558f0eb148b5a, type: 3}
 --- !u!1001 &1205004205754974951
 PrefabInstance:
   m_ObjectHideFlags: 0

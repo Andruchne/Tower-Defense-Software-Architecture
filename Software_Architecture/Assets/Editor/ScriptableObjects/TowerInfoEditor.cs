@@ -46,6 +46,7 @@ public class TowerInfoEditor : Editor
         // Draw default inspector fields, except for the arrays
         EditorGUILayout.PropertyField(serializedObject.FindProperty("towerTypeName"));
         EditorGUILayout.PropertyField(serializedObject.FindProperty("attackType"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("projectileMoveType"));
     }
 
     private void MatchArraySizes()

@@ -13,6 +13,7 @@ public class TowerInfo : ScriptableObject
     public string towerTypeName;
     public AttackType attackType;
     public GameObject[] towerModel;
+    public Projectile.ProjectileMoveType projectileMoveType;
     public float[] damage;
     public float[] range;
     public float[] attackCooldown;
