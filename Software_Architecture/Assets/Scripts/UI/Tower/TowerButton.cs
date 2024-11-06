@@ -7,7 +7,7 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     [SerializeField] GameObject towerDescriptionPrefab;
     [SerializeField] TowerInfo towerInfo;
-    [SerializeField] Vector3 offset;
+    [SerializeField] RectTransform menu;
 
     // To invoke onTypeSelected event
     private TowerTypeSelection _towerTypeSelect;
@@ -75,10 +75,11 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     private void UpdatePreviewPos()
     {
-        if (_currentPreviewCanvas != null)
+        if (_currentPreviewCanvas != null && menu != null)
         {
-            Vector3 pos = transform.position + offset;
+            Vector3 pos = menu.position + new Vector3(menu.rect.width * menu.lossyScale.x, 0, 0);
 
+            // Update only if the position has changed
             if (_currentPreviewCanvas.transform.GetChild(0).position != pos)
             {
                 _currentPreviewCanvas.transform.GetChild(0).position = pos;

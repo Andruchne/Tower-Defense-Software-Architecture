@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2789835548394351318}
   - component: {fileID: 2789835548394351305}
   - component: {fileID: 2789835548394351304}
+  - component: {fileID: 1698681235900628126}
   m_Layer: 7
   m_Name: Tower
   m_TagString: Untagged
@@ -46,8 +47,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reachTargetDuration: 1
-  shootType: 1
-  TowerPrefab: {fileID: 2789835548394351307}
 --- !u!135 &2789835548394351304
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -61,3 +60,15 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1698681235900628126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2789835548394351307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26b4f26d5fabe04a856703628fb74fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

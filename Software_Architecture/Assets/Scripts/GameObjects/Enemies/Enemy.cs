@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour, ITargetable
 {
+    public event Action<ITargetable> onTargetDestroyed;
+
     [SerializeField] float moveSpeed = 1;
     [SerializeField] float maxHealth = 3;
 
@@ -52,11 +54,11 @@ public class Enemy : MonoBehaviour, ITargetable
     public void Hit(float damage)
     {
         Health -= damage;
-        Debug.Log(Health);
     }
 
     public void Defeated()
     {
+        onTargetDestroyed?.Invoke(this);
         Destroy(gameObject);
     }
 

@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerDescriptionPrefab: {fileID: 4393174703862285514, guid: f2f8222c68f5b954dbb4d2247516668c, type: 3}
   towerInfo: {fileID: 11400000, guid: 38373c7513a842b4fa2f913705aa8424, type: 2}
-  offset: {x: 200, y: 0, z: 0}
+  menu: {fileID: 6638590398450787746}
 --- !u!1 &3393154819081447270
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,7 +553,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.8
+  m_fontSize: 36.8
   m_fontSizeBase: 22
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -858,7 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerDescriptionPrefab: {fileID: 4393174703862285514, guid: f2f8222c68f5b954dbb4d2247516668c, type: 3}
   towerInfo: {fileID: 11400000, guid: 1c772ead51380d84fa466d23963686bc, type: 2}
-  offset: {x: 200, y: 0, z: 0}
+  menu: {fileID: 6638590398450787746}
 --- !u!1 &6955898637117742498
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,7 +1008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerDescriptionPrefab: {fileID: 4393174703862285514, guid: f2f8222c68f5b954dbb4d2247516668c, type: 3}
   towerInfo: {fileID: 11400000, guid: ce8a3c75cdd21804c82719c889046e4c, type: 2}
-  offset: {x: 200, y: 0, z: 0}
+  menu: {fileID: 6638590398450787746}
 --- !u!1 &7436171823948704181
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public interface ITargetable
 {
+    public event Action<ITargetable> onTargetDestroyed;
+
     void Hit(float damage);
     void Defeated();
 

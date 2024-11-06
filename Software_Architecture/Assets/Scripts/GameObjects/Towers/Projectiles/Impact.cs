@@ -34,7 +34,6 @@ public class Impact : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("gawk");
         ITargetable target = other.GetComponent<ITargetable>();
 
         if (target != null)

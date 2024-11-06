@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5349780027404496275}
   - component: {fileID: 2906730747118942941}
   - component: {fileID: 1856836838784794749}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArrowImpact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -70,6 +70,10 @@ PrefabInstance:
     - target: {fileID: 1150857119123887404, guid: 02991d33a39339a4d8ed4480eda402d7, type: 3}
       propertyPath: m_Name
       value: ArrowRain
+      objectReference: {fileID: 0}
+    - target: {fileID: 1150857119123887404, guid: 02991d33a39339a4d8ed4480eda402d7, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2953523243381836695, guid: 02991d33a39339a4d8ed4480eda402d7, type: 3}
       propertyPath: m_RootOrder

@@ -11,21 +11,44 @@ public class Tower : MonoBehaviour
     private Projectile.ProjectileMoveType _shootType;
     private SphereCollider _detectRangeCol;
 
+    private bool _readyToAttack;
+
     // This holds all the general info the tower needs to know about itself
     private CurrentTower _currentTower;
 
     private Transform _projectileOrigin;
     private bool _initialized;
 
-    private void Start()
+    private Timer _timer;
+
+    private List<ITargetable> _targets = new List<ITargetable>();
+
+
+    private void OnDestroy()
     {
-        _currentTower.currentTier = 1;
-        _projectileOrigin = GetProjectileOrigin();
+        if (_initialized)
+        {
+            _timer.onTimerFinished -= ActivateReadyToAttack;
+        }
+
+        // Just in case target list isn't empty
+        foreach (ITargetable target in _targets)
+        {
+            target.onTargetDestroyed -= RemoveDestroyedTarget;
+        }
+    }
+
+    private void Update()
+    {
+        CheckForInitialization();
+        CheckAttack();
     }
 
     public void Initialize(TowerInfo towerInfo)
     {
         // Get and set all important info
+        _projectileOrigin = GetProjectileOrigin();
+
         _currentTower.currentTier = 1;
         _currentTower.info = towerInfo;
 
@@ -34,9 +57,37 @@ public class Tower : MonoBehaviour
         _detectRangeCol.radius = towerInfo.range[0];
 
         _initialized = true;
+
+        // Initialize timer
+        // As tower always starts at tier 1, no need to get tier from info reference
+        _timer = GetComponent<Timer>();
+        _timer.Initialize(_currentTower.info.attackCooldown[0], true);
+
+        _timer.onTimerFinished += ActivateReadyToAttack;
     }
 
-    protected void Attack(Vector3 targetPos)
+    private void CheckForInitialization()
+    {
+        if (!_initialized)
+        {
+            Debug.LogError("Tower: Tried updating without prior initialization. Destroying object.");
+            Destroy(gameObject);
+        }
+    }
+
+    private void CheckAttack()
+    {
+        if (_targets.Count > 0 && _readyToAttack)
+        {
+            ITargetable target = GetCurrentTarget();
+
+            Attack(target.GetNextPosition(reachTargetDuration));
+            _timer.ResetTimer(true);
+            _readyToAttack = false;
+        }
+    }
+
+    private void Attack(Vector3 targetPos)
     {
         // Make sure scriptable object is valid
         if (_currentTower.info.attackType.projectile == null)
@@ -62,13 +113,17 @@ public class Tower : MonoBehaviour
         proj.Shoot(targetPos, _shootType, reachTargetDuration);
     }
 
+
+
+    // Target detection
     protected void OnTriggerEnter(Collider other)
     {
         ITargetable target = other.GetComponent<ITargetable>();
 
         if (target != null)
         {
-            Attack(target.GetNextPosition(reachTargetDuration));
+            target.onTargetDestroyed += RemoveDestroyedTarget;
+            _targets.Add(target);
         }
     }
 
@@ -78,14 +133,35 @@ public class Tower : MonoBehaviour
 
         if (target != null)
         {
-            
+            target.onTargetDestroyed -= RemoveDestroyedTarget;
+            _targets.Remove(target);
         }
     }
 
-    public Transform GetProjectileOrigin()
+
+
+    // For projectile movement and target handling
+    private ITargetable GetCurrentTarget()
     {
-        // Get all child transforms
-        Transform[] children = GetComponentsInChildren<Transform>(includeInactive: true);
+        if (_targets.Count <= 0) { return null; }
+
+        return _targets[0];
+    }
+
+    private void RemoveDestroyedTarget(ITargetable target)
+    {
+        target.onTargetDestroyed -= RemoveDestroyedTarget;
+        _targets.Remove(target);
+    }
+
+    private void ActivateReadyToAttack()
+    {
+        _readyToAttack = true;
+    }
+
+    private Transform GetProjectileOrigin()
+    {
+        Transform[] children = GetComponentsInChildren<Transform>();
 
         foreach (Transform child in children)
         {

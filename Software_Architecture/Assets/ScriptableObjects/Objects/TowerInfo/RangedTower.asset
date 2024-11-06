@@ -20,7 +20,7 @@ MonoBehaviour:
   - {fileID: 9002180301444432152, guid: 7886786f11cfbc547a0bc2c7cd5d413e, type: 3}
   projectileMoveType: 1
   damage:
-  - 3
+  - 1
   - 5
   - 8
   range:
@@ -28,7 +28,7 @@ MonoBehaviour:
   - 1.75
   - 2
   attackCooldown:
-  - 3
+  - 1
   - 2.5
   - 2
   effectRadius:

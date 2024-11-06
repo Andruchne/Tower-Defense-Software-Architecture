@@ -12,10 +12,10 @@ public class Timer : MonoBehaviour
 
     private bool _active;
 
-    public void Initialize(float waitTime, bool autoStart = false)
+    public void Initialize(float waitTime, bool startTimer = false)
     {
         _waitTime = waitTime;
-        if (autoStart) { StartTimer(); }
+        if (startTimer) { StartTimer(); }
     }
 
     private void Update()
