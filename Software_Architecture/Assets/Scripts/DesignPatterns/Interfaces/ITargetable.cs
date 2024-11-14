@@ -5,7 +5,7 @@ using UnityEngine;
 
 public interface ITargetable
 {
-    public event Action<ITargetable> onTargetDestroyed;
+    public event Action<ITargetable> OnTargetDestroyed;
 
     void Hit(float damage);
     void Defeated();

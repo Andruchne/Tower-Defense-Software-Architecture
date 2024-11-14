@@ -3,36 +3,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HealthComponent))]
 public class Enemy : MonoBehaviour, ITargetable
 {
-    public event Action<ITargetable> onTargetDestroyed;
+    public event Action<ITargetable> OnTargetDestroyed;
 
     [SerializeField] float moveSpeed = 1;
-    [SerializeField] float maxHealth = 3;
-
-    public float Health
-    {
-        get
-        {
-            return _health;
-        }
-        set
-        {
-            _health = value;
-
-            if (_health <= 0)
-            {
-                Defeated();
-            }
-        }
-    }
-    private float _health;
 
     private IMoveBehaviour _moveBehaviour;
+    private HealthComponent _healthComp;
 
     private void Start()
     {
-        Health = maxHealth;
+        _healthComp = GetComponent<HealthComponent>();
 
         // Get move behaviour and do null check
         _moveBehaviour = GetComponent<IMoveBehaviour>();
@@ -53,12 +36,12 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float damage)
     {
-        Health -= damage;
+        _healthComp.Health -= damage;
     }
 
     public void Defeated()
     {
-        onTargetDestroyed?.Invoke(this);
+        OnTargetDestroyed?.Invoke(this);
         Destroy(gameObject);
     }
 

@@ -38,7 +38,7 @@ public class TowerSlot : MonoBehaviour
     {
         if (_towerTypeSelect != null)
         {
-            _towerTypeSelect.onTypeSelected -= TowerSelected;
+            _towerTypeSelect.OnTypeSelected -= TowerSelected;
         }
     }
 
@@ -52,7 +52,7 @@ public class TowerSlot : MonoBehaviour
 
                 // Subscribe to button click event
                 _towerTypeSelect = _currentMenuCanvas.GetComponent<TowerTypeSelection>();
-                _towerTypeSelect.onTypeSelected += TowerSelected;
+                _towerTypeSelect.OnTypeSelected += TowerSelected;
 
                 // Get needed elements in order to check for UI mouse input
                 _graphicRaycaster = _currentMenuCanvas.GetComponent<GraphicRaycaster>();
@@ -63,7 +63,7 @@ public class TowerSlot : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0) && _isMenuOpen && !TowerMenuClicked())
         {
-            _towerTypeSelect.onTypeSelected -= TowerSelected;
+            _towerTypeSelect.OnTypeSelected -= TowerSelected;
 
             Destroy(_currentMenuCanvas);
             _currentMenuCanvas = null;

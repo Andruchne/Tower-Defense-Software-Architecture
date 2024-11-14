@@ -5,10 +5,10 @@ using UnityEngine;
 
 public class TowerTypeSelection : MonoBehaviour
 {
-    public event Action<TowerInfo> onTypeSelected;
+    public event Action<TowerInfo> OnTypeSelected;
 
     public void InvokeTypeSelected(TowerInfo info)
     {
-        onTypeSelected?.Invoke(info);
+        OnTypeSelected?.Invoke(info);
     }
 }

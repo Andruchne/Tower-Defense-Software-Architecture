@@ -8,6 +8,9 @@ public class Tower : MonoBehaviour
     [Description("Decides how long the shot projectile needs to reach the targetPos (In seconds)")]
     [SerializeField] float reachTargetDuration = 0.5f;
 
+    [Description("Particle which is instantiated when tower emerges from the ground")]
+    [SerializeField] ParticleSystem emergeParticle;
+
     private Projectile.ProjectileMoveType _shootType;
     private SphereCollider _detectRangeCol;
 
@@ -23,18 +26,17 @@ public class Tower : MonoBehaviour
 
     private List<ITargetable> _targets = new List<ITargetable>();
 
-
     private void OnDestroy()
     {
         if (_initialized)
         {
-            _timer.onTimerFinished -= ActivateReadyToAttack;
+            _timer.OnTimerFinished -= ActivateReadyToAttack;
         }
 
         // Just in case target list isn't empty
         foreach (ITargetable target in _targets)
         {
-            target.onTargetDestroyed -= RemoveDestroyedTarget;
+            target.OnTargetDestroyed -= RemoveDestroyedTarget;
         }
     }
 
@@ -49,7 +51,8 @@ public class Tower : MonoBehaviour
         // Get and set all important info
         _projectileOrigin = GetProjectileOrigin();
 
-        _currentTower.currentTier = 1;
+        // First tier starts at 0
+        _currentTower.currentTier = 0;
         _currentTower.info = towerInfo;
 
         _shootType = towerInfo.projectileMoveType;
@@ -63,7 +66,9 @@ public class Tower : MonoBehaviour
         _timer = GetComponent<Timer>();
         _timer.Initialize(_currentTower.info.attackCooldown[0], true);
 
-        _timer.onTimerFinished += ActivateReadyToAttack;
+        _timer.OnTimerFinished += ActivateReadyToAttack;
+
+        MakeTowerEmerge();
     }
 
     private void CheckForInitialization()
@@ -96,21 +101,20 @@ public class Tower : MonoBehaviour
             return;
         }
 
-        Projectile proj = Instantiate(
+        Projectile projectile = Instantiate(
             _currentTower.info.attackType.projectile, 
             _projectileOrigin.position, 
-            Quaternion.identity, 
-            null).GetComponent<Projectile>();
+            Quaternion.identity).GetComponent<Projectile>();
 
         // In case the prefab holds no projectile script
-        if (proj == null)
+        if (projectile == null)
         {
             Debug.LogError("Projectile Prefab " + _currentTower.info.attackType.projectile.name + ": No projectile script attached");
             return;
         }
 
-        proj.Initialize(_currentTower);
-        proj.Shoot(targetPos, _shootType, reachTargetDuration);
+        projectile.Initialize(_currentTower);
+        projectile.Shoot(targetPos, _shootType, reachTargetDuration);
     }
 
 
@@ -122,7 +126,7 @@ public class Tower : MonoBehaviour
 
         if (target != null)
         {
-            target.onTargetDestroyed += RemoveDestroyedTarget;
+            target.OnTargetDestroyed += RemoveDestroyedTarget;
             _targets.Add(target);
         }
     }
@@ -133,7 +137,7 @@ public class Tower : MonoBehaviour
 
         if (target != null)
         {
-            target.onTargetDestroyed -= RemoveDestroyedTarget;
+            target.OnTargetDestroyed -= RemoveDestroyedTarget;
             _targets.Remove(target);
         }
     }
@@ -150,7 +154,7 @@ public class Tower : MonoBehaviour
 
     private void RemoveDestroyedTarget(ITargetable target)
     {
-        target.onTargetDestroyed -= RemoveDestroyedTarget;
+        target.OnTargetDestroyed -= RemoveDestroyedTarget;
         _targets.Remove(target);
     }
 
@@ -172,5 +176,93 @@ public class Tower : MonoBehaviour
         }
 
         return transform;
+    }
+
+    // For the spawn Effect
+    private void MakeTowerEmerge()
+    {
+        // Do the shake effect
+        float towerHeight = GetTowerHeight();
+        float additionalOffset = 0.05f;
+
+        float emergeDistance = towerHeight + additionalOffset;
+        float riseTime = 2;
+
+        InstantiateParticle(riseTime);
+
+        transform.position = new Vector3(transform.position.x,
+            transform.position.y - emergeDistance,
+            transform.position.z);
+
+        EmergeWithShake(emergeDistance, riseTime);
+    }
+
+    private float GetTowerHeight()
+    {
+        Bounds combinedBounds = new Bounds(transform.position, Vector3.zero);
+
+        // Go through each render component and add them to the bounds
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (Renderer renderer in renderers)
+        {
+            combinedBounds.Encapsulate(renderer.bounds);
+        }
+
+        // Return total height
+        return combinedBounds.size.y;
+    }
+
+    private void EmergeWithShake(float riseHeight, float riseTime)
+    {
+        Vector3 originalPosition = transform.position;
+
+        float shakeIntensity = 0.025f;
+        float shakeFrequency = 0.05f;
+        float shakeTimer = 0;
+
+        // Move the object up a few shakes
+        LeanTween.moveY(gameObject, originalPosition.y + riseHeight, riseTime)
+        .setEase(LeanTweenType.linear)
+        .setOnUpdate((float value) => {
+
+            shakeTimer += Time.deltaTime;
+
+            if (shakeTimer >= shakeFrequency)
+            {
+            // Generate random offsets for X and Z axes to shake
+             float shakeOffsetX = Random.Range(-shakeIntensity, shakeIntensity);
+            float shakeOffsetZ = Random.Range(-shakeIntensity, shakeIntensity);
+
+            transform.position = new Vector3(
+                originalPosition.x + shakeOffsetX,
+                transform.position.y,
+                originalPosition.z + shakeOffsetZ);
+
+            // Reset timer for next shake
+            shakeTimer = 0f;
+            }
+        })
+        .setOnComplete(() => {
+            // Reset X and Z positions to original pos
+            transform.position = new Vector3(originalPosition.x, transform.position.y, originalPosition.z);
+        });
+    }
+
+    private void InstantiateParticle(float riseTime)
+    {
+        if (emergeParticle != null)
+        {
+            ParticleSystem[] particleSystems = emergeParticle.GetComponentsInChildren<ParticleSystem>();
+
+            // Set the duration for all particle systems
+            foreach (ParticleSystem particleSys in particleSystems)
+            {
+                ParticleSystem.MainModule mainModule = particleSys.main;
+                mainModule.duration = riseTime;
+            }
+
+            Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
+        }
+        else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
     }
 }

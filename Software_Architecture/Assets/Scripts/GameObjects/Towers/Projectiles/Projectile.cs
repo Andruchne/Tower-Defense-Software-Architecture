@@ -40,11 +40,14 @@ public class Projectile : MonoBehaviour
             Impact impact = Instantiate(
                 impactPrefab,
                 new Vector3(transform.position.x, 0.2f, transform.position.z),
-                Quaternion.identity,
-                null).GetComponent<Impact>();
+                Quaternion.identity).GetComponent<Impact>();
 
+            // Safety check
             if (impact != null) { impact.Initialize(_currentTower); }
             else { Debug.LogError("Impact Prefab " + impactPrefab.name + ": Prefab has no impact script attached"); }
+
+            // Set radius to whatever impact range was given
+            impact.GetComponent<SphereCollider>().radius = _currentTower.info.effectRadius[_currentTower.currentTier];
         }
         else { Debug.LogError("Projectile Prefab " + gameObject.name + ": Prefab has no impact prefab attached"); }
 
@@ -70,7 +73,7 @@ public class Projectile : MonoBehaviour
         float curveHeight = 1.0f;
         Vector3 startPos = transform.position;
 
-        // Use LeanTween to animate the position and rotation
+        // Animate position and rotation
         LeanTween.value(gameObject, 0, 1, duration).setOnUpdate((float t) =>
         {
             // Calculate position with parabolic curve
@@ -78,10 +81,9 @@ public class Projectile : MonoBehaviour
             float parabola = 4 * curveHeight * t * (1 - t);
             pos.y = Mathf.Lerp(startPos.y, targetPos.y, t) + parabola;
 
-            // Update the position
             transform.position = pos;
 
-            // Calculate direction based on the movement of `t` along the curve
+            // Calculate direction based on the movement of t along the curve
             Vector3 nextPos = Vector3.Lerp(startPos, targetPos, t + Time.deltaTime / duration);
             float nextParabola = 4 * curveHeight * (t + Time.deltaTime / duration) * (1 - (t + Time.deltaTime / duration));
             nextPos.y = Mathf.Lerp(startPos.y, targetPos.y, t + Time.deltaTime / duration) + nextParabola;
@@ -93,8 +95,7 @@ public class Projectile : MonoBehaviour
                 Quaternion targetRotation = Quaternion.LookRotation(direction);
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 0.1f);
             }
-        }).setEase(LeanTweenType.linear)
-        .setOnComplete(() => { Impact(); });
+        }).setOnComplete(() => { Impact(); });
     }
 
 }

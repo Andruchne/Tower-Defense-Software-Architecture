@@ -47,6 +47,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   reachTargetDuration: 1
+  emergeParticle: {fileID: 232837754777989916, guid: f5550ed9133fdc040882dbbdbacbe927, type: 3}
 --- !u!135 &2789835548394351304
 SphereCollider:
   m_ObjectHideFlags: 0

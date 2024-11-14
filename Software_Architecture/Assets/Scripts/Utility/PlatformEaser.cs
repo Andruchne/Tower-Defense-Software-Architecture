@@ -37,7 +37,7 @@ public class PlatformEaser : MonoBehaviour
     {
         if (timer != null)
         {
-            timer.onTimerFinished -= TweenPlatforms;
+            timer.OnTimerFinished -= TweenPlatforms;
         }
     }
 
@@ -57,7 +57,7 @@ public class PlatformEaser : MonoBehaviour
         // Setup Timer
         timer = gameObject.AddComponent<Timer>();
         timer.Initialize(0.15f);
-        timer.onTimerFinished += TweenPlatforms;
+        timer.OnTimerFinished += TweenPlatforms;
     }
 
     private void SortPlatforms()

@@ -9,11 +9,6 @@ public class Impact : MonoBehaviour
     private ParticleSystem _impactParticleSystem;
     private CurrentTower _currentTower;
 
-    private void Start()
-    {
-        _impactParticleSystem = particleSystemHolder.GetComponent<ParticleSystem>();
-    }
-
     private void Update()
     {
         DestroyOnFinish();
@@ -21,7 +16,22 @@ public class Impact : MonoBehaviour
 
     public void Initialize(CurrentTower currentTower)
     {
-        this._currentTower = currentTower; 
+        _impactParticleSystem = particleSystemHolder.GetComponent<ParticleSystem>();
+
+        this._currentTower = currentTower;
+        SetImpactRadius();
+    }
+
+    private void SetImpactRadius()
+    {
+        float radius = _currentTower.info.effectRadius[_currentTower.currentTier];
+
+        // Set collider radius
+        GetComponent<SphereCollider>().radius = radius;
+
+        // Update particle effect radius
+        ParticleSystem.ShapeModule shape = _impactParticleSystem.shape;
+        shape.radius = radius;
     }
 
     private void DestroyOnFinish()
@@ -39,7 +49,7 @@ public class Impact : MonoBehaviour
         if (target != null)
         {
             int tier = _currentTower.currentTier;
-            target.Hit(_currentTower.info.damage[tier - 1]);
+            target.Hit(_currentTower.info.damage[tier]);
         }
     }
 }
