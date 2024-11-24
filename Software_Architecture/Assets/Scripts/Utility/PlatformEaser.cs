@@ -14,6 +14,9 @@ public class PlatformEaser : MonoBehaviour
     [Tooltip("How much time needs to pass, in order to reach the destination")]
     [SerializeField] float timeToMove = 1.5f;
 
+    [Tooltip("How much time needs to pass, to move next platforms")]
+    [SerializeField] float timeBetweenStages = 0.15f;
+
 
     private List<GameObject> _children = new List<GameObject>();
     private Dictionary<int, Vector3> _initialPositions = new Dictionary<int, Vector3>();
@@ -25,7 +28,7 @@ public class PlatformEaser : MonoBehaviour
 
     private int _currentStage;
 
-    private Timer timer;
+    private Timer _timer;
 
     void Start()
     {
@@ -35,10 +38,15 @@ public class PlatformEaser : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (timer != null)
+        if (_timer != null)
         {
-            timer.OnTimerFinished -= TweenPlatforms;
+            _timer.OnTimerFinished -= TweenPlatforms;
         }
+    }
+
+    private void Update()
+    {
+        //Debug.Log(_currentStage);
     }
 
     private void Setup()
@@ -55,9 +63,9 @@ public class PlatformEaser : MonoBehaviour
         }
 
         // Setup Timer
-        timer = gameObject.AddComponent<Timer>();
-        timer.Initialize(0.15f);
-        timer.OnTimerFinished += TweenPlatforms;
+        _timer = gameObject.AddComponent<Timer>();
+        _timer.Initialize(timeBetweenStages, true);
+        _timer.OnTimerFinished += TweenPlatforms;
     }
 
     private void SortPlatforms()
@@ -85,13 +93,11 @@ public class PlatformEaser : MonoBehaviour
         _numbersOrdered.Sort();
 
         // Start the first wave of platform tweening
-        timer.StartTimer();
+        _timer.StartTimer();
     }
 
     private void TweenPlatforms()
     {
-        timer.StopTimer(true);
-
         // Check if it's time to tween the current platform
         // This unifies tweening between all platforms, no matter the parent
         if (Mathf.Round(_numbersOrdered[_currentIndex]) == _currentStage)
@@ -107,9 +113,9 @@ public class PlatformEaser : MonoBehaviour
 
         // Increase stage and only continue tweening, if there are still platforms to tween
         _currentStage++;
-        if (_currentIndex < _numbersOrdered.Count)
+        if (_currentIndex >= _numbersOrdered.Count)
         {
-            timer.StartTimer();
+            _timer.StopTimer();
         }
     }
 

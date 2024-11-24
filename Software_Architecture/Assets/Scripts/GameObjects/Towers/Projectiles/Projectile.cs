@@ -37,10 +37,10 @@ public class Projectile : MonoBehaviour
         if (impactPrefab != null)
         {
             // Ground height is 0.2, we're assuming it stays this way
-            Impact impact = Instantiate(
+            ImpactDamage impact = Instantiate(
                 impactPrefab,
                 new Vector3(transform.position.x, 0.2f, transform.position.z),
-                Quaternion.identity).GetComponent<Impact>();
+                Quaternion.identity).GetComponent<ImpactDamage>();
 
             // Safety check
             if (impact != null) { impact.Initialize(_currentTower); }

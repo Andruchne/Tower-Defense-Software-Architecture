@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -70,7 +70,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -119,8 +119,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1feb4f52bab9e584fadff725f96dc5d6
-      internalID: -1567902750
+      spriteID: 6d03c8274bccc0e49ba4e25967fd9f0a
+      internalID: -493736983
       vertices: []
       indices: 
       edges: []
@@ -140,8 +140,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5b6081e8b66bda4fb3bac94b7568b98
-      internalID: 799849707
+      spriteID: 4ef30e8b031fd1042bf4638035aace55
+      internalID: -1618616579
       vertices: []
       indices: 
       edges: []
@@ -161,8 +161,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 56a964a8896680e418d7a68656dc7245
-      internalID: 1928771569
+      spriteID: cfbe44a1b9cf442448fd8b25c9fff16f
+      internalID: -1527382081
       vertices: []
       indices: 
       edges: []
@@ -182,8 +182,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 105517c7e4a9fae45a20802e6f3ac933
-      internalID: 389305132
+      spriteID: 4b83b568ae2c7aa48b07e346c3394b62
+      internalID: 737789002
       vertices: []
       indices: 
       edges: []
@@ -192,9 +192,9 @@ TextureImporter:
       name: TowerTypeSymbols_4
       rect:
         serializedVersion: 2
-        x: 734
+        x: 735
         y: 781
-        width: 532
+        width: 531
         height: 531
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -203,8 +203,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1dec4bc7c029fc04dbb05ef7495dbf4d
-      internalID: -640473612
+      spriteID: eaaa220838aea234d9e3bd8fa11ff546
+      internalID: -1967712570
       vertices: []
       indices: 
       edges: []
@@ -224,8 +224,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fa52edca10fbe224c9803ee3199390f9
-      internalID: -1387384385
+      spriteID: d9c87314e5d7af2488d008528c991f67
+      internalID: -155771361
       vertices: []
       indices: 
       edges: []
@@ -235,9 +235,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 123
-        y: 174
+        y: 175
         width: 474
-        height: 474
+        height: 473
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -245,8 +245,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bd8f702a05ad67e4e9b39dae293182c3
-      internalID: 1030662123
+      spriteID: 0e3f47a8504406946901e33bccd4c147
+      internalID: 633412231
       vertices: []
       indices: 
       edges: []
@@ -256,9 +256,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 763
-        y: 150
+        y: 147
         width: 474
-        height: 616
+        height: 523
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -266,8 +266,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8215a6d688141e4ca8c6204cba39c3a
-      internalID: -1589989131
+      spriteID: fa3378ce5ef7a6c4d8871ec03575156f
+      internalID: 244872372
       vertices: []
       indices: 
       edges: []
@@ -277,9 +277,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 1403
-        y: 174
+        y: 175
         width: 474
-        height: 474
+        height: 473
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,134 +287,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 22274d70702dae74aa804c86327d6c3a
-      internalID: 1101020596
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_9
-      rect:
-        serializedVersion: 2
-        x: 986
-        y: 103
-        width: 15
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 91accb3ff3774304c8070fd9ce7ad6a5
-      internalID: -561600054
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_10
-      rect:
-        serializedVersion: 2
-        x: 1019
-        y: 108
-        width: 4
-        height: 4
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 56af37522ba269c47b4fce4196669fc6
-      internalID: -1878799191
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_11
-      rect:
-        serializedVersion: 2
-        x: 701
-        y: 77
-        width: 22
-        height: 26
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 79190b8cfb9781a41a61b9196632e5b5
-      internalID: -1370451705
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_12
-      rect:
-        serializedVersion: 2
-        x: 948
-        y: 74
-        width: 11
-        height: 22
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 395ecb69b15627849b1c587a99b11ec7
-      internalID: 2058310040
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_13
-      rect:
-        serializedVersion: 2
-        x: 981
-        y: 70
-        width: 47
-        height: 33
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9eb0b0c2e8624f241a6dd690e0ef036e
-      internalID: 1871093032
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: TowerTypeSymbols_14
-      rect:
-        serializedVersion: 2
-        x: 944
-        y: 68
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3b4f5faccb2556e4a96fa8d3b0bf05d0
-      internalID: -1368074694
+      spriteID: 671f7a2cb758d9b48b9e1fa8e083f58d
+      internalID: -2100339925
       vertices: []
       indices: 
       edges: []
@@ -422,7 +296,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: a24639073d7251c46ac4e8ad455e5ef2
     internalID: 0
     vertices: []
     indices: 
@@ -430,21 +304,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      TowerTypeSymbols_0: -1567902750
-      TowerTypeSymbols_1: 799849707
-      TowerTypeSymbols_10: -1878799191
-      TowerTypeSymbols_11: -1370451705
-      TowerTypeSymbols_12: 2058310040
-      TowerTypeSymbols_13: 1871093032
-      TowerTypeSymbols_14: -1368074694
-      TowerTypeSymbols_2: 1928771569
-      TowerTypeSymbols_3: 389305132
-      TowerTypeSymbols_4: -640473612
-      TowerTypeSymbols_5: -1387384385
-      TowerTypeSymbols_6: 1030662123
-      TowerTypeSymbols_7: -1589989131
-      TowerTypeSymbols_8: 1101020596
-      TowerTypeSymbols_9: -561600054
+      TowerTypeSymbols_0: -493736983
+      TowerTypeSymbols_1: -1618616579
+      TowerTypeSymbols_2: -1527382081
+      TowerTypeSymbols_3: 737789002
+      TowerTypeSymbols_4: -1967712570
+      TowerTypeSymbols_5: -155771361
+      TowerTypeSymbols_6: 633412231
+      TowerTypeSymbols_7: 244872372
+      TowerTypeSymbols_8: -2100339925
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

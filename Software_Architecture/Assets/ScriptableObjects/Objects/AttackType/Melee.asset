@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackType: MeleeAttack
   attackTypeDescription: Slashes a single target
-  projectile: {fileID: 0}
+  projectile: {fileID: 1205004205397025059, guid: cf66919540c23cc4b822fb4d78a3cc89, type: 3}

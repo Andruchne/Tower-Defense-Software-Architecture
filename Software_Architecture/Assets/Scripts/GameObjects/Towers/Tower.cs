@@ -8,8 +8,16 @@ public class Tower : MonoBehaviour
     [Description("Decides how long the shot projectile needs to reach the targetPos (In seconds)")]
     [SerializeField] float reachTargetDuration = 0.5f;
 
+    [Description("Decides how long the tower takes to emerge")]
+    [SerializeField] float riseTime = 1.0f;
+
     [Description("Particle which is instantiated when tower emerges from the ground")]
     [SerializeField] ParticleSystem emergeParticle;
+
+    [Description("To instantiate slot, in case this tower gets destroyed")]
+    [SerializeField] GameObject towerSlot;
+
+    private Tweens _tween = new Tweens();
 
     private Projectile.ProjectileMoveType _shootType;
     private SphereCollider _detectRangeCol;
@@ -26,6 +34,18 @@ public class Tower : MonoBehaviour
 
     private List<ITargetable> _targets = new List<ITargetable>();
 
+    private MenuOpener _menuOpener;
+    private TowerConfigSelection _openedWindow;
+
+    private bool _active = true;
+
+    private void Start()
+    {
+        _menuOpener = GetComponentInChildren<MenuOpener>();
+        _menuOpener.OnMenuOpened += MenuOpened;
+        _menuOpener.OnMenuClosed += MenuClosed;
+    }
+
     private void OnDestroy()
     {
         if (_initialized)
@@ -38,6 +58,10 @@ public class Tower : MonoBehaviour
         {
             target.OnTargetDestroyed -= RemoveDestroyedTarget;
         }
+
+        _menuOpener.OnMenuOpened -= MenuOpened;
+        _menuOpener.OnMenuClosed -= MenuClosed;
+        UnbindWindowEvents();
     }
 
     private void Update()
@@ -49,7 +73,7 @@ public class Tower : MonoBehaviour
     public void Initialize(TowerInfo towerInfo)
     {
         // Get and set all important info
-        _projectileOrigin = GetProjectileOrigin();
+        _projectileOrigin = GetProjectileOrigin(transform);
 
         // First tier starts at 0
         _currentTower.currentTier = 0;
@@ -63,9 +87,8 @@ public class Tower : MonoBehaviour
 
         // Initialize timer
         // As tower always starts at tier 1, no need to get tier from info reference
-        _timer = GetComponent<Timer>();
-        _timer.Initialize(_currentTower.info.attackCooldown[0], true);
-
+        _timer = gameObject.AddComponent<Timer>();
+        _timer.Initialize(_currentTower.info.attackCooldown[0], false, true);
         _timer.OnTimerFinished += ActivateReadyToAttack;
 
         MakeTowerEmerge();
@@ -82,10 +105,11 @@ public class Tower : MonoBehaviour
 
     private void CheckAttack()
     {
+        if (!_active) { return; }
+
         if (_targets.Count > 0 && _readyToAttack)
         {
             ITargetable target = GetCurrentTarget();
-
             Attack(target.GetNextPosition(reachTargetDuration));
             _timer.ResetTimer(true);
             _readyToAttack = false;
@@ -100,12 +124,11 @@ public class Tower : MonoBehaviour
             Debug.LogError("Scriptable Object " + _currentTower.info.attackType.name + ": No valid projectile given");
             return;
         }
-
         Projectile projectile = Instantiate(
             _currentTower.info.attackType.projectile, 
             _projectileOrigin.position, 
             Quaternion.identity).GetComponent<Projectile>();
-
+        
         // In case the prefab holds no projectile script
         if (projectile == null)
         {
@@ -115,12 +138,92 @@ public class Tower : MonoBehaviour
 
         projectile.Initialize(_currentTower);
         projectile.Shoot(targetPos, _shootType, reachTargetDuration);
+        
+    }
+
+    private void UpgradeTower()
+    {
+        _currentTower.currentTier += 1;
+        int tier = _currentTower.currentTier;
+
+        // Update tower values
+        _timer.SetWaitTime(_currentTower.info.attackCooldown[tier]);
+        _detectRangeCol.radius = _currentTower.info.range[tier];
+        List<GameObject> towerChildren = Useful.GetAllChildren(transform);
+
+        // Remove old towerModel
+        foreach (GameObject gameObject in towerChildren)
+        {
+            if (gameObject.tag == "Model")
+            {
+                Destroy(gameObject);
+            }
+        }
+        // Instantiate new one
+        GameObject newModel = Instantiate(_currentTower.info.towerModel[_currentTower.currentTier], transform);
+        _projectileOrigin = GetProjectileOrigin(newModel.transform);
+
+        // Shake a bit
+        float duration = 0.5f;
+
+        _tween.Shake(transform, duration);
+        InstantiateDirtParticle(duration);
+    }
+
+    private void SubmergeTower()
+    {
+        _active = false;
+        Destroy(_menuOpener);
+
+        float towerHeight = Useful.GetRenderedHeight(transform);
+        float additionalOffset = 0.05f;
+
+        float submergeDistance = towerHeight + additionalOffset;
+
+        InstantiateDirtParticle(riseTime);
+        _tween.SubmergeWithShake(transform, submergeDistance, riseTime);
+        _tween.OnTweenComplete += DestroyTower;
+    }
+
+    private void DestroyTower()
+    {
+        _tween.OnTweenComplete -= DestroyTower;
+        // Calculate position before submerging
+        TowerSlot slot = Instantiate(towerSlot, 
+            new Vector3(transform.position.x, transform.position.y + Useful.GetRenderedHeight(transform) + 0.05f, transform.position.z), 
+            transform.rotation).GetComponent<TowerSlot>();
+        slot.MakeSlotEmerge();
+        Destroy(gameObject);
     }
 
 
+    // Upgrade Menu
+    private void MenuOpened()
+    {
+        _openedWindow = _menuOpener.GetCurrentMenu().GetComponent<TowerConfigSelection>();
+        _openedWindow.GetComponent<TowerUpgradeDescription>().SetInfo(_currentTower);
+
+        _openedWindow.OnUpgrade += UpgradeTower;
+        _openedWindow.OnDestruct += SubmergeTower;
+    }
+
+    private void MenuClosed()
+    {
+        UnbindWindowEvents();
+        _openedWindow = null;
+    }
+
+    private void UnbindWindowEvents()
+    {
+        if (_openedWindow != null)
+        {
+            _openedWindow.OnUpgrade -= UpgradeTower;
+            _openedWindow.OnDestruct -= SubmergeTower;
+        }
+    }
 
     // Target detection
-    protected void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         ITargetable target = other.GetComponent<ITargetable>();
 
@@ -163,9 +266,9 @@ public class Tower : MonoBehaviour
         _readyToAttack = true;
     }
 
-    private Transform GetProjectileOrigin()
+    private Transform GetProjectileOrigin(Transform transform)
     {
-        Transform[] children = GetComponentsInChildren<Transform>();
+        Transform[] children = transform.GetComponentsInChildren<Transform>();
 
         foreach (Transform child in children)
         {
@@ -182,73 +285,21 @@ public class Tower : MonoBehaviour
     private void MakeTowerEmerge()
     {
         // Do the shake effect
-        float towerHeight = GetTowerHeight();
+        float towerHeight = Useful.GetRenderedHeight(transform);
         float additionalOffset = 0.05f;
 
         float emergeDistance = towerHeight + additionalOffset;
-        float riseTime = 2;
 
-        InstantiateParticle(riseTime);
+        InstantiateDirtParticle(riseTime);
 
         transform.position = new Vector3(transform.position.x,
             transform.position.y - emergeDistance,
             transform.position.z);
 
-        EmergeWithShake(emergeDistance, riseTime);
+        _tween.EmergeWithShake(transform, emergeDistance, riseTime);
     }
 
-    private float GetTowerHeight()
-    {
-        Bounds combinedBounds = new Bounds(transform.position, Vector3.zero);
-
-        // Go through each render component and add them to the bounds
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (Renderer renderer in renderers)
-        {
-            combinedBounds.Encapsulate(renderer.bounds);
-        }
-
-        // Return total height
-        return combinedBounds.size.y;
-    }
-
-    private void EmergeWithShake(float riseHeight, float riseTime)
-    {
-        Vector3 originalPosition = transform.position;
-
-        float shakeIntensity = 0.025f;
-        float shakeFrequency = 0.05f;
-        float shakeTimer = 0;
-
-        // Move the object up a few shakes
-        LeanTween.moveY(gameObject, originalPosition.y + riseHeight, riseTime)
-        .setEase(LeanTweenType.linear)
-        .setOnUpdate((float value) => {
-
-            shakeTimer += Time.deltaTime;
-
-            if (shakeTimer >= shakeFrequency)
-            {
-            // Generate random offsets for X and Z axes to shake
-             float shakeOffsetX = Random.Range(-shakeIntensity, shakeIntensity);
-            float shakeOffsetZ = Random.Range(-shakeIntensity, shakeIntensity);
-
-            transform.position = new Vector3(
-                originalPosition.x + shakeOffsetX,
-                transform.position.y,
-                originalPosition.z + shakeOffsetZ);
-
-            // Reset timer for next shake
-            shakeTimer = 0f;
-            }
-        })
-        .setOnComplete(() => {
-            // Reset X and Z positions to original pos
-            transform.position = new Vector3(originalPosition.x, transform.position.y, originalPosition.z);
-        });
-    }
-
-    private void InstantiateParticle(float riseTime)
+    private void InstantiateDirtParticle(float duration)
     {
         if (emergeParticle != null)
         {
@@ -258,7 +309,7 @@ public class Tower : MonoBehaviour
             foreach (ParticleSystem particleSys in particleSystems)
             {
                 ParticleSystem.MainModule mainModule = particleSys.main;
-                mainModule.duration = riseTime;
+                mainModule.duration = duration;
             }
 
             Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));

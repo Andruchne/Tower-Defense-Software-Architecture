@@ -19,10 +19,10 @@ MonoBehaviour:
   - {fileID: 6333047487807554408, guid: 1a4dd56c79f9a754d91a7cd25671c22a, type: 3}
   - {fileID: 9002180301444432152, guid: 7886786f11cfbc547a0bc2c7cd5d413e, type: 3}
   projectileMoveType: 1
-  damage:
+  power:
   - 1
-  - 5
-  - 8
+  - 2
+  - 3
   range:
   - 1.5
   - 1.75

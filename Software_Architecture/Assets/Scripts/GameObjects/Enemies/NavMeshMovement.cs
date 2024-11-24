@@ -18,6 +18,9 @@ public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
         _agent.speed = speed;
         _agent.acceleration = speed / 2;
         _agent.SetDestination(_destination);
+
+        // Reset velocity, to account for changing speed whilst moving
+        _agent.velocity = Vector3.zero;
     }
 
     public Vector3 GetCurrentVelocity()

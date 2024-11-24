@@ -14,7 +14,7 @@ public class TowerInfo : ScriptableObject
     public AttackType attackType;
     public GameObject[] towerModel;
     public Projectile.ProjectileMoveType projectileMoveType;
-    public float[] damage;
+    public float[] power;
     public float[] range;
     public float[] attackCooldown;
     public float[] effectRadius;

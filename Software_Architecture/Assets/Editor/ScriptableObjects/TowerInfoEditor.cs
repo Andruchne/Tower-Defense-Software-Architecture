@@ -5,7 +5,7 @@ using UnityEditor;
 public class TowerInfoEditor : Editor
 {
     private SerializedProperty _towerModelProp;
-    private SerializedProperty _damageProp;
+    private SerializedProperty _powerProp;
     private SerializedProperty _rangeProp;
     private SerializedProperty _attackCooldownProp;
     private SerializedProperty _effectRadiusProp;
@@ -13,7 +13,7 @@ public class TowerInfoEditor : Editor
     private void OnEnable()
     {
         _towerModelProp = serializedObject.FindProperty("towerModel");
-        _damageProp = serializedObject.FindProperty("damage");
+        _powerProp = serializedObject.FindProperty("power");
         _rangeProp = serializedObject.FindProperty("range");
         _attackCooldownProp = serializedObject.FindProperty("attackCooldown");
         _effectRadiusProp = serializedObject.FindProperty("effectRadius");
@@ -33,9 +33,9 @@ public class TowerInfoEditor : Editor
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Tower Model & Stat Configuration", EditorStyles.boldLabel);
 
-        // Ensure arrays have the same size
+        // Make sure arrays have the same size
         MatchArraySizes();
-        // Draw custom array editors for towerModel and towerDamage
+        // Draw custom array editors for towerModel and stats
         DrawArrays();
 
         serializedObject.ApplyModifiedProperties();
@@ -51,12 +51,12 @@ public class TowerInfoEditor : Editor
 
     private void MatchArraySizes()
     {
-        if (_towerModelProp.arraySize != _damageProp.arraySize)
+        if (_towerModelProp.arraySize != _powerProp.arraySize)
         {
             // Synchronize array sizes if they don't match
-            int newSize = Mathf.Max(_towerModelProp.arraySize, _damageProp.arraySize);
+            int newSize = Mathf.Max(_towerModelProp.arraySize, _powerProp.arraySize);
             _towerModelProp.arraySize = newSize;
-            _damageProp.arraySize = newSize;
+            _powerProp.arraySize = newSize;
             _rangeProp.arraySize = newSize;
             _attackCooldownProp.arraySize = newSize;
             _effectRadiusProp.arraySize = newSize;
@@ -70,7 +70,7 @@ public class TowerInfoEditor : Editor
         // Draw the labels above the array elements
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("Tower Model", GUILayout.Width(200));
-        EditorGUILayout.LabelField("Damage", GUILayout.Width(100));
+        EditorGUILayout.LabelField("Power", GUILayout.Width(100));
         EditorGUILayout.LabelField("Range", GUILayout.Width(100));
         EditorGUILayout.LabelField("Attack Cooldown", GUILayout.Width(100));
         EditorGUILayout.LabelField("Effect Radius", GUILayout.Width(100));
@@ -78,14 +78,14 @@ public class TowerInfoEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 
-    // Draw the array fields and remove buttons
+    // Draw the array fields and buttons
     for (int i = 0; i < _towerModelProp.arraySize; i++)
     {
         EditorGUILayout.BeginHorizontal();
 
-        // Draw the elements of towerModel, damage, range, and attackCooldown
+        // Draw the elements
         EditorGUILayout.PropertyField(_towerModelProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(200));
-        EditorGUILayout.PropertyField(_damageProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
+        EditorGUILayout.PropertyField(_powerProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
         EditorGUILayout.PropertyField(_rangeProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
         EditorGUILayout.PropertyField(_attackCooldownProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
         EditorGUILayout.PropertyField(_effectRadiusProp.GetArrayElementAtIndex(i), GUIContent.none, GUILayout.Width(100));
@@ -94,7 +94,7 @@ public class TowerInfoEditor : Editor
         if (GUILayout.Button("Remove", GUILayout.Width(60)))
         {
             _towerModelProp.DeleteArrayElementAtIndex(i);
-            _damageProp.DeleteArrayElementAtIndex(i);
+            _powerProp.DeleteArrayElementAtIndex(i);
             _rangeProp.DeleteArrayElementAtIndex(i);
             _attackCooldownProp.DeleteArrayElementAtIndex(i);
             _effectRadiusProp.DeleteArrayElementAtIndex(i);
@@ -103,11 +103,11 @@ public class TowerInfoEditor : Editor
         EditorGUILayout.EndHorizontal();
     }
 
-    // Button to add a new element to all arrays
-    if (GUILayout.Button("Add New Tower Model & Damage"))
+    // Button to add new element
+    if (GUILayout.Button("Add New Tower Tier"))
     {
         _towerModelProp.arraySize++;
-        _damageProp.arraySize++;
+        _powerProp.arraySize++;
         _rangeProp.arraySize++;
         _attackCooldownProp.arraySize++;
         _effectRadiusProp.arraySize++;
@@ -123,7 +123,7 @@ public class TowerInfoEditor : Editor
             // Check if towerModel is not assigned
             if (_towerModelProp.GetArrayElementAtIndex(i).objectReferenceValue == null)
             {
-                EditorGUILayout.HelpBox($"towerModel at index {i} is null.", MessageType.Error);
+                EditorGUILayout.HelpBox($"TowerModel at index {i} is null.", MessageType.Error);
             }
         }
     }

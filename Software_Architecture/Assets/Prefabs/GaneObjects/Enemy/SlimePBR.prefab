@@ -77,6 +77,7 @@ GameObject:
   - component: {fileID: 7364411746218320693}
   - component: {fileID: 7364411746218320691}
   - component: {fileID: 7364411746218320688}
+  - component: {fileID: 219504990976990968}
   m_Layer: 6
   m_Name: SlimePBR
   m_TagString: Untagged
@@ -198,6 +199,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
+--- !u!114 &219504990976990968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7364926863940747986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f6f0c9b8e054df4089f45a280d0924e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 7567282972511865042, guid: 284948eca79fb344b8f9f3bfc3eda68a, type: 3}
+  maxHealth: 3
+  _height: 45
 --- !u!1 &7365074053149038590
 GameObject:
   m_ObjectHideFlags: 0

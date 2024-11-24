@@ -112,5 +112,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerMenuPrefab: {fileID: 4726502673128555710, guid: 68c9f917fdf0b784cb7143c0407f0318, type: 3}
-  offset: {x: 0, y: 0, z: 0}
   towerPrefab: {fileID: 2789835548394351307, guid: e4b6eecb23ac956489f0d1a0f22085b9, type: 3}
+  emergeParticle: {fileID: 232837754777989916, guid: f5550ed9133fdc040882dbbdbacbe927, type: 3}
+  riseTime: 1

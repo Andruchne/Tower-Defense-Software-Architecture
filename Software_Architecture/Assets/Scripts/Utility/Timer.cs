@@ -11,10 +11,14 @@ public class Timer : MonoBehaviour
     private float _currentPassedTime;
 
     private bool _active;
+    private bool _loop;
 
-    public void Initialize(float waitTime, bool startTimer = false)
+    // As MonoBehaviour is in use, using the class constructor is not an option
+    // To use this timer, instantiate a timer object and call Initialize() for setup
+    public void Initialize(float waitTime, bool loop = false, bool startTimer = false)
     {
         _waitTime = waitTime;
+        _loop = loop;
         if (startTimer) { StartTimer(); }
     }
 
@@ -32,9 +36,24 @@ public class Timer : MonoBehaviour
         // Timer finished
         if (_currentPassedTime >= _waitTime)
         {
+            // Continue timer if set to loop
+            if (_loop) { ResetTimer(true); }
+            // Deactivate and reset timer otherwise
+            else { ResetTimer(); }
+
             OnTimerFinished?.Invoke();
-            _currentPassedTime = 0;
         }
+    }
+
+    // Methods to adjust timer
+    public void SetWaitTime(float waitTime)
+    {
+        _waitTime = waitTime;
+    }
+
+    public void SetLoop(bool loop)
+    {
+        _loop = loop;
     }
 
     // Methods for managing timer

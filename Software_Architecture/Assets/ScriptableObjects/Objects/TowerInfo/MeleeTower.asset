@@ -18,11 +18,11 @@ MonoBehaviour:
   - {fileID: 3495206144695972096, guid: 45eb0d58aee251f4a8910000b407fdc7, type: 3}
   - {fileID: 8049520091743909114, guid: e4b765c434a8f884a9b8931f061b551d, type: 3}
   - {fileID: 5534698141590473859, guid: 9235e87af043f8e4fb09e382b0eddf75, type: 3}
-  projectileMoveType: 0
-  damage:
+  projectileMoveType: 1
+  power:
+  - 2
+  - 3
   - 5
-  - 7
-  - 10
   range:
   - 1.5
   - 1.75
@@ -32,6 +32,6 @@ MonoBehaviour:
   - 1.75
   - 1.5
   effectRadius:
-  - 1
-  - 1
-  - 1
+  - 0.1
+  - 0.1
+  - 0.1

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -6,9 +7,13 @@ using UnityEngine.UI;
 public class TowerSlot : MonoBehaviour
 {
     [SerializeField] GameObject towerMenuPrefab;
-    [SerializeField] Vector3 offset;
-
     [SerializeField] GameObject towerPrefab;
+
+    [Description("Particle which is instantiated when tower emerges from the ground")]
+    [SerializeField] ParticleSystem emergeParticle;
+
+    [Description("Is only used when emerge is called on this slot")]
+    [SerializeField] float riseTime = 1.0f;
 
     // To position the menu correctly
     private Camera _camera;
@@ -21,7 +26,9 @@ public class TowerSlot : MonoBehaviour
     private PointerEventData _pointerEventData;
     private EventSystem _eventSystem;
 
-    private bool _isMenuOpen = false;
+    private bool _isMenuOpen;
+
+    private Tweens _tween = new Tweens();
 
     private void Start()
     {
@@ -77,7 +84,7 @@ public class TowerSlot : MonoBehaviour
         // To keep the window at the position it's supposed to be
         if (_currentMenuCanvas != null)
         {
-            Vector3 pos = _camera.WorldToScreenPoint(transform.position + offset);
+            Vector3 pos = _camera.WorldToScreenPoint(transform.position);
 
             if (_currentMenuCanvas.transform.GetChild(0).position != pos)
             {
@@ -135,7 +142,7 @@ public class TowerSlot : MonoBehaviour
         Transform towerHolder = Instantiate(
             towerPrefab,
             transform.position,
-            Quaternion.identity).transform;
+            transform.rotation).transform;
 
         // Instantiate tower model seperately and add to tower holder
         Instantiate(
@@ -148,5 +155,39 @@ public class TowerSlot : MonoBehaviour
         tower.Initialize(towerInfo);
 
         Destroy(gameObject);
+    }
+
+    public void MakeSlotEmerge()
+    {
+        // Do the shake effect
+        float slotHeight = Useful.GetRenderedHeight(transform);
+        float additionalOffset = 0.05f;
+        float emergeDistance = slotHeight + additionalOffset;
+
+        InstantiateDirtParticle(riseTime);
+
+        transform.position = new Vector3(transform.position.x,
+            transform.position.y - emergeDistance,
+            transform.position.z);
+
+        _tween.EmergeWithShake(transform, emergeDistance, riseTime);
+    }
+
+    private void InstantiateDirtParticle(float riseTime)
+    {
+        if (emergeParticle != null)
+        {
+            ParticleSystem[] particleSystems = emergeParticle.GetComponentsInChildren<ParticleSystem>();
+
+            // Set the duration for all particle systems
+            foreach (ParticleSystem particleSys in particleSystems)
+            {
+                ParticleSystem.MainModule mainModule = particleSys.main;
+                mainModule.duration = riseTime;
+            }
+
+            Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
+        }
+        else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
     }
 }
