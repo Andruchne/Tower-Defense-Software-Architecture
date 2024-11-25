@@ -204,6 +204,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9c79d396ddb3d2a44920018b213be121, type: 3}
   m_PrefabInstance: {fileID: 172973851}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &97988343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 97988345}
+  - component: {fileID: 97988344}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &97988344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97988343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 384edcf6b5d3c53448541c72ac9bf497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &97988345
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97988343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.1814351, y: 4.0355916, z: -3.571841}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &128494755 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 9c79d396ddb3d2a44920018b213be121, type: 3}
@@ -719,7 +763,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dcfa60f41ef6d4695987f09635482b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setbackDistance: -8
+  setbackDistance: -24
   timeToMove: 1.5
   timeBetweenStages: 0.15
 --- !u!1001 &337019302
@@ -3636,7 +3680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dcfa60f41ef6d4695987f09635482b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setbackDistance: -8
+  setbackDistance: -24
   timeToMove: 1.5
   timeBetweenStages: 0.15
 --- !u!4 &1431700527 stripped
@@ -3691,7 +3735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dcfa60f41ef6d4695987f09635482b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setbackDistance: -8
+  setbackDistance: -24
   timeToMove: 1.5
   timeBetweenStages: 0.15
 --- !u!1 &1442421741 stripped
@@ -4588,7 +4632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dcfa60f41ef6d4695987f09635482b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  setbackDistance: -8
+  setbackDistance: -24
   timeToMove: 1.5
   timeBetweenStages: 0.15
 --- !u!4 &2024278798 stripped

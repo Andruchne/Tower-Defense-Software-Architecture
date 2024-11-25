@@ -17,6 +17,9 @@ public class PlatformEaser : MonoBehaviour
     [Tooltip("How much time needs to pass, to move next platforms")]
     [SerializeField] float timeBetweenStages = 0.15f;
 
+    // To be able to tell, when all platforms are in place
+    private static List<PlatformEaser> _platformEasers = new List<PlatformEaser>();
+    private static int _activePlatforms;
 
     private List<GameObject> _children = new List<GameObject>();
     private Dictionary<int, Vector3> _initialPositions = new Dictionary<int, Vector3>();
@@ -30,6 +33,8 @@ public class PlatformEaser : MonoBehaviour
 
     private Timer _timer;
 
+    private bool _active;
+
     void Start()
     {
         Setup();
@@ -40,17 +45,17 @@ public class PlatformEaser : MonoBehaviour
     {
         if (_timer != null)
         {
-            _timer.OnTimerFinished -= TweenPlatforms;
+            _timer.OnTimerFinished -= TweenPlatformsIn;
+            _timer.OnTimerFinished -= TweenPlatformsAway;
         }
-    }
 
-    private void Update()
-    {
-        //Debug.Log(_currentStage);
+        EventBus<OnLevelFinishedEvent>.OnEvent -= RemovePlatforms;
     }
 
     private void Setup()
     {
+        _platformEasers.Add(this);
+
         for (int i = 0; i < transform.childCount; i++)
         {
             // Get child
@@ -65,7 +70,12 @@ public class PlatformEaser : MonoBehaviour
         // Setup Timer
         _timer = gameObject.AddComponent<Timer>();
         _timer.Initialize(timeBetweenStages, true);
-        _timer.OnTimerFinished += TweenPlatforms;
+
+        _active = true;
+        _timer.OnTimerFinished += TweenPlatformsIn;
+
+        // For when level is finished
+        EventBus<OnLevelFinishedEvent>.OnEvent += RemovePlatforms;
     }
 
     private void SortPlatforms()
@@ -96,7 +106,42 @@ public class PlatformEaser : MonoBehaviour
         _timer.StartTimer();
     }
 
-    private void TweenPlatforms()
+    private void CheckLevelLoaded()
+    {
+        if (_activePlatforms > 0) { return; }
+
+        // Invoke OnLevelLoaded, after all platforms are moved
+        EventBus<OnLevelLoadedEvent>.Publish(new OnLevelLoadedEvent());
+    }
+
+    private void CheckLevelUnloaded()
+    {
+        foreach (PlatformEaser easer in _platformEasers)
+        {
+            if (!easer.GetActive())
+            {
+                return;
+            }
+        }
+        // Invoke OnLevelLoaded, after all platforms are moved
+        EventBus<OnLevelUnloadedEvent>.Publish(new OnLevelUnloadedEvent());
+    }
+
+    private void RemovePlatforms(OnLevelFinishedEvent onLevelFinishedEvent)
+    {
+        // Reset values
+        _currentIndex = 0;
+        _currentStage = 0;
+        _active = true;
+
+        _timer.OnTimerFinished -= TweenPlatformsIn;
+        _timer.OnTimerFinished += TweenPlatformsAway;
+        _timer.ResetTimer(true);
+
+        CheckLevelUnloaded();
+    }
+
+    private void TweenPlatformsIn()
     {
         // Check if it's time to tween the current platform
         // This unifies tweening between all platforms, no matter the parent
@@ -106,7 +151,14 @@ public class PlatformEaser : MonoBehaviour
             List<PlatformInfo> platforms = _objectDict[_numbersOrdered[_currentIndex]];
             for (int i = 0; i < platforms.Count; i++)
             {
-                LeanTween.move(platforms[i].gameObject, platforms[i].initialPosition, timeToMove).setEase(LeanTweenType.easeOutBack);
+                _activePlatforms++;
+                LeanTween.move(platforms[i].gameObject, platforms[i].initialPosition, timeToMove)
+                    .setEase(LeanTweenType.easeOutBack)
+                    .setOnComplete(() => {
+                        // Decrease platform count
+                        _activePlatforms--;
+                        CheckLevelLoaded();
+                    });
             }
             _currentIndex++;
         }
@@ -115,6 +167,39 @@ public class PlatformEaser : MonoBehaviour
         _currentStage++;
         if (_currentIndex >= _numbersOrdered.Count)
         {
+            _active = false;
+            _timer.StopTimer();
+        }
+    }
+
+    private void TweenPlatformsAway()
+    {
+        // Check if it's time to tween the current platform
+        // This unifies tweening between all platforms, no matter the parent
+        if (Mathf.Round(_numbersOrdered[_currentIndex]) == _currentStage)
+        {
+            // Tween all platforms contained inside the dicitonary, with the fitting number
+            List<PlatformInfo> platforms = _objectDict[_numbersOrdered[_currentIndex]];
+
+            for (int i = 0; i < platforms.Count; i++)
+            {
+                _activePlatforms++;
+                LeanTween.move(platforms[i].gameObject,
+                    platforms[i].initialPosition + new Vector3(0, setbackDistance, 0),
+                    timeToMove).setEase(LeanTweenType.easeInBack)
+                    .setOnComplete(() => {
+                        // Decrease platform count
+                        _activePlatforms--;
+                    });
+            }
+            _currentIndex++;
+        }
+
+        // Increase stage and only continue tweening, if there are still platforms to tween
+        _currentStage++;
+        if (_currentIndex >= _numbersOrdered.Count)
+        {
+            _active = false;
             _timer.StopTimer();
         }
     }
@@ -128,5 +213,10 @@ public class PlatformEaser : MonoBehaviour
         if (Mathf.Abs(pos.z) > biggestNumber) { biggestNumber = Mathf.Abs(pos.z); }
 
         return biggestNumber;
+    }
+
+    public bool GetActive()
+    {
+        return _active;
     }
 }

@@ -76,4 +76,9 @@ public class Timer : MonoBehaviour
         if (startTimer) { StartTimer(); }
         else { StopTimer(); }
     }
+
+    public bool GetActive()
+    {
+        return _active;
+    }
 }
