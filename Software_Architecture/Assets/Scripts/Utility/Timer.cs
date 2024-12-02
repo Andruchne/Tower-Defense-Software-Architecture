@@ -6,6 +6,7 @@ using UnityEngine;
 public class Timer : MonoBehaviour
 {
     public event Action OnTimerFinished;
+    public event Action OnTimerUpdated;
 
     private float _waitTime;
     private float _currentPassedTime;
@@ -32,6 +33,7 @@ public class Timer : MonoBehaviour
         if (!_active) { return; }
 
         _currentPassedTime += Time.deltaTime;
+        OnTimerUpdated?.Invoke();
 
         // Timer finished
         if (_currentPassedTime >= _waitTime)
@@ -77,8 +79,17 @@ public class Timer : MonoBehaviour
         else { StopTimer(); }
     }
 
+    // Getters
     public bool GetActive()
     {
         return _active;
+    }
+
+    public float GetTimeLeft()
+    {
+        float timeLeft = _waitTime - _currentPassedTime;
+        if (timeLeft < 0) { timeLeft = 0; }
+
+        return  timeLeft;
     }
 }

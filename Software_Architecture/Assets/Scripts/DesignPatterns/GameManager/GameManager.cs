@@ -1,16 +1,11 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            EventBus<OnLevelFinishedEvent>.Publish(new OnLevelFinishedEvent(true));
-        }
-    }
+    [SerializeField] float timePerBreak = 60;
+
+    private Timer _breakTimer;
 
     #region Singleton Pattern
     public static GameManager Instance { get; private set; }
@@ -28,18 +23,61 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+        DontDestroyOnLoad(gameObject);
+    }
+    #endregion
+
+    private void Start()
+    {
+        _breakTimer = gameObject.AddComponent<Timer>();
+        _breakTimer.Initialize(timePerBreak);
+
         // Show/Hide cursor while loading/unloading
         EventBus<OnLevelLoadedEvent>.OnEvent += ToggleCursorState;
-        EventBus<OnLevelUnloadedEvent>.OnEvent += ToggleCursorState;
+        EventBus<OnLevelLoadedEvent>.OnEvent += StartBreak;
+        EventBus<OnLevelFinishedEvent>.OnEvent += ToggleCursorState;
 
-        DontDestroyOnLoad(gameObject);
+        EventBus<OnStartBreakTime>.OnEvent += StartBreak;
+        EventBus<OnStopBreakTimeEarly>.OnEvent += StopBreakEarly;
+        _breakTimer.OnTimerUpdated += UpdateTimeHUD;
+        _breakTimer.OnTimerFinished += StopBreak;
     }
 
     private void OnDestroy()
     {
         EventBus<OnLevelLoadedEvent>.OnEvent -= ToggleCursorState;
-        EventBus<OnLevelUnloadedEvent>.OnEvent -= ToggleCursorState;
+        EventBus<OnLevelLoadedEvent>.OnEvent -= StartBreak;
+        EventBus<OnLevelFinishedEvent>.OnEvent -= ToggleCursorState;
+
+        EventBus<OnStartBreakTime>.OnEvent -= StartBreak;
+        _breakTimer.OnTimerUpdated -= UpdateTimeHUD;
+        _breakTimer.OnTimerFinished -= StopBreak;
     }
+
+    #region Level Management
+
+    private void UpdateTimeHUD()
+    {
+        EventBus<OnUpdateCurrentTime>.Publish(new OnUpdateCurrentTime((int)_breakTimer.GetTimeLeft()));
+    }
+
+    private void StartBreak<T>(T onEvent)
+    {
+        _breakTimer.ResetTimer(true);
+    }
+
+    // Two seperate methods, to listen to Action event, as well as EventBus
+    private void StopBreakEarly(OnStopBreakTimeEarly onStopBreakTimeEarly)
+    {
+        StopBreak();
+    }
+
+    private void StopBreak()
+    {
+        _breakTimer.ResetTimer(false);
+        EventBus<OnStopBreakTime>.Publish(new OnStopBreakTime());
+    }
+
     #endregion
 
     #region Load Scene Logic
@@ -68,7 +106,6 @@ public class GameManager : MonoBehaviour
     private void ToggleCursorState<T>(T onLevelEvent)
     {
         Cursor.visible = !Cursor.visible;
-        Debug.Log(Cursor.lockState);
         if (Cursor.lockState == CursorLockMode.None) { Cursor.lockState = CursorLockMode.Locked; }
         else { Cursor.lockState = CursorLockMode.None; }
     }

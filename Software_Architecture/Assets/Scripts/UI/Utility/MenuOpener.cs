@@ -27,7 +27,6 @@ public class MenuOpener : MonoBehaviour
         _camera = Camera.main;
     }
 
-    // Update is called once per frame
     void Update()
     {
         OpenCloseMenu();

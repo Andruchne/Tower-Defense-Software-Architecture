@@ -6,7 +6,7 @@ using UnityEngine;
 public class Tower : MonoBehaviour
 {
     [Description("Decides how long the shot projectile needs to reach the targetPos (In seconds)")]
-    [SerializeField] float reachTargetDuration = 0.5f;
+    [SerializeField] float projectileReachDuration = 0.5f;
 
     [Description("Decides how long the tower takes to emerge")]
     [SerializeField] float riseTime = 1.0f;
@@ -110,7 +110,7 @@ public class Tower : MonoBehaviour
         if (_targets.Count > 0 && _readyToAttack)
         {
             ITargetable target = GetCurrentTarget();
-            Attack(target.GetNextPosition(reachTargetDuration));
+            Attack(target.GetNextPosition(projectileReachDuration));
             _timer.ResetTimer(true);
             _readyToAttack = false;
         }
@@ -137,7 +137,7 @@ public class Tower : MonoBehaviour
         }
 
         projectile.Initialize(_currentTower);
-        projectile.Shoot(targetPos, _shootType, reachTargetDuration);
+        projectile.Shoot(targetPos, _shootType, projectileReachDuration);
         
     }
 

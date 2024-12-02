@@ -4,9 +4,11 @@ using UnityEngine;
 [RequireComponent(typeof(HealthComponent))]
 public class Enemy : MonoBehaviour, ITargetable
 {
-    public event Action<ITargetable> OnTargetDestroyed;
+    [SerializeField] ParticleSystem dustParticle;
 
     [SerializeField] float moveSpeed = 1;
+
+    public event Action<ITargetable> OnTargetDestroyed;
     private float _defaultMoveSpeed;
     private Timer _moveSpeedAlteredTimer;
 
@@ -33,17 +35,28 @@ public class Enemy : MonoBehaviour, ITargetable
         }
         // To make sure that the move behaviour was able to get all necessary components
         Invoke("StartMoving", 0.1f);
+
+        EventBus<OnPlayerDefeatedEvent>.OnEvent += Vanish;
     }
 
     private void OnDestroy()
     {
         _healthComp.OnDeath -= Defeated;
         _moveSpeedAlteredTimer.OnTimerFinished -= ResetSpeed;
+        EventBus<OnPlayerDefeatedEvent>.OnEvent -= Vanish;
     }
 
     private void StartMoving()
     {
         _moveBehaviour.Move(moveSpeed);
+    }
+
+    private void Vanish(OnPlayerDefeatedEvent onPlayerDefeated)
+    {
+        float dustDuration = 1.0f;
+        InstantiateDustParticle(dustDuration);
+
+        Destroy(gameObject);
     }
 
     public void Hit(float damage)
@@ -80,5 +93,24 @@ public class Enemy : MonoBehaviour, ITargetable
         Vector3 predictedPosition = transform.position + currentVelocity.normalized * distance;
 
         return predictedPosition;
+    }
+
+    private void InstantiateDustParticle(float duration)
+    {
+        if (dustParticle != null)
+        {
+            ParticleSystem[] particleSystems = dustParticle.GetComponentsInChildren<ParticleSystem>();
+
+            // Set the duration for all particle systems
+            foreach (ParticleSystem particleSys in particleSystems)
+            {
+                ParticleSystem.MainModule mainModule = particleSys.main;
+                mainModule.duration = duration;
+            }
+
+            Vector3 particlePos = new Vector3(transform.position.x, transform.position.y + Useful.GetRenderedHeight(transform), transform.position.z);
+            Instantiate(dustParticle, particlePos, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
+        }
+        else { Debug.LogError("Tower Prefab: No dustParticle to instantiate"); }
     }
 }

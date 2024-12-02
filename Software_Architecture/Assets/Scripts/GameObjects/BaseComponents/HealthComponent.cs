@@ -9,7 +9,7 @@ public class HealthComponent : MonoBehaviour
     [SerializeField] GameObject healthBarPrefab;
     [SerializeField] float maxHealth = 3;
 
-    [Description("How high up the healthbar is supposed to be placed up from the object")]
+    [Description("How high up the healthbar is supposed to be placed from the object")]
     [SerializeField] float _height;
 
     private Camera _camera;

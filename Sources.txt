@@ -3,4 +3,11 @@ Upgrade Background: upklyak from www.freepik.com
 Slot Type Background: upklyak from www.freepik.com
 WoodUI: upklyak from www.freepik.com
 
+Player UI
+Tower symbol hear: mapshakers from www.loading.io
+Heart icon: itim2101 from www.flaticon.com
+Gold icon: Umeicon from www.flaticon.com
+Hourglass: Freepick from www.flaticon.com
+Fast Forward: Pavel Kozlov from www.flaticon.com
+
 Tower Type Symbols: freepik from www.freepik.com

@@ -15,14 +15,12 @@ public class EventBus<T> where T : Event
 }
 
 #region Level Management
+
+// Finishing level
 public class OnLevelFinishedEvent : Event
 {
     // Invoke to indicate that level is complete
-    public OnLevelFinishedEvent(bool isGameWon) 
-    {
-        this.isGameWon = isGameWon;
-    }
-    bool isGameWon;
+    public OnLevelFinishedEvent() { }
 }
 public class OnLevelLoadedEvent : Event
 {
@@ -30,15 +28,31 @@ public class OnLevelLoadedEvent : Event
     // Necessary to enable cursor, after scene load
     public OnLevelLoadedEvent() { }
 }
-
 public class OnLevelUnloadedEvent : Event
 {
     // Invoke to indicate that level is unloaded
     public OnLevelUnloadedEvent() { }
 }
+
+// Level states
+public class OnStartBreakTime : Event
+{
+    public OnStartBreakTime() { }
+}
+public class OnStopBreakTimeEarly : Event
+{
+    public OnStopBreakTimeEarly() { }
+}
+public class OnStopBreakTime : Event
+{
+    public OnStopBreakTime() { }
+}
+
 #endregion
 
-#region Game
+#region Player
+
+// General Player
 public class OnGetGoldEvent : Event
 {
     // Invoke to give player gold
@@ -57,4 +71,36 @@ public class OnDamagePlayerEvent : Event
     }
     public float damage;
 }
+public class OnPlayerDefeatedEvent : Event
+{
+    // Invoke to indicate player's defeat
+    public OnPlayerDefeatedEvent() { }
+}
+
+// Player UI
+public class OnUpdateCurrentGold : Event
+{
+    public OnUpdateCurrentGold(int currentAmount)
+    {
+        this.currentAmount = currentAmount;
+    }
+    public int currentAmount;
+}
+public class OnUpdateCurrentHealth : Event
+{
+    public OnUpdateCurrentHealth(float currentPercent)
+    {
+        this.currentPercent = currentPercent;
+    }
+    public float currentPercent;
+}
+public class OnUpdateCurrentTime : Event
+{
+    public OnUpdateCurrentTime(int currentAmount)
+    {
+        this.currentAmount = currentAmount;
+    }
+    public int currentAmount;
+}
+
 #endregion
