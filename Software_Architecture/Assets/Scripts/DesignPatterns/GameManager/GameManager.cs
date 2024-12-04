@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
         EventBus<OnLevelLoadedEvent>.OnEvent += StartBreak;
         EventBus<OnLevelFinishedEvent>.OnEvent += ToggleCursorState;
 
-        EventBus<OnStartBreakTime>.OnEvent += StartBreak;
         EventBus<OnStopBreakTimeEarly>.OnEvent += StopBreakEarly;
         _breakTimer.OnTimerUpdated += UpdateTimeHUD;
         _breakTimer.OnTimerFinished += StopBreak;
@@ -49,7 +48,6 @@ public class GameManager : MonoBehaviour
         EventBus<OnLevelLoadedEvent>.OnEvent -= StartBreak;
         EventBus<OnLevelFinishedEvent>.OnEvent -= ToggleCursorState;
 
-        EventBus<OnStartBreakTime>.OnEvent -= StartBreak;
         _breakTimer.OnTimerUpdated -= UpdateTimeHUD;
         _breakTimer.OnTimerFinished -= StopBreak;
     }
@@ -64,6 +62,7 @@ public class GameManager : MonoBehaviour
     private void StartBreak<T>(T onEvent)
     {
         _breakTimer.ResetTimer(true);
+        EventBus<OnStartBreakTime>.Publish(new OnStartBreakTime());
     }
 
     // Two seperate methods, to listen to Action event, as well as EventBus

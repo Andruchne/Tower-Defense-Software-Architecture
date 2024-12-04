@@ -4,9 +4,12 @@ using UnityEngine;
 [RequireComponent(typeof(HealthComponent))]
 public class Enemy : MonoBehaviour, ITargetable
 {
+    [SerializeField] GameObject goldGainedCanvas;
     [SerializeField] ParticleSystem dustParticle;
 
+    [SerializeField] float power = 1;
     [SerializeField] float moveSpeed = 1;
+    [SerializeField] int rewardAmount = 100;
 
     public event Action<ITargetable> OnTargetDestroyed;
     private float _defaultMoveSpeed;
@@ -15,8 +18,14 @@ public class Enemy : MonoBehaviour, ITargetable
     private IMoveBehaviour _moveBehaviour;
     private HealthComponent _healthComp;
 
+    private Animator _anim;
+
+    private bool _destinationReached;
+
     private void Start()
     {
+        _anim = GetComponent<Animator>();
+
         _defaultMoveSpeed = moveSpeed;
         _moveSpeedAlteredTimer = gameObject.AddComponent<Timer>();
         _moveSpeedAlteredTimer.Initialize(0);
@@ -36,14 +45,28 @@ public class Enemy : MonoBehaviour, ITargetable
         // To make sure that the move behaviour was able to get all necessary components
         Invoke("StartMoving", 0.1f);
 
-        EventBus<OnPlayerDefeatedEvent>.OnEvent += Vanish;
+        EventBus<OnPlayerDefeatedEvent>.OnEvent += TriggerVanish;
     }
 
     private void OnDestroy()
     {
         _healthComp.OnDeath -= Defeated;
         _moveSpeedAlteredTimer.OnTimerFinished -= ResetSpeed;
-        EventBus<OnPlayerDefeatedEvent>.OnEvent -= Vanish;
+        EventBus<OnPlayerDefeatedEvent>.OnEvent -= TriggerVanish;
+    }
+
+    private void Update()
+    {
+        DestinationReached();
+    }
+
+    private void DestinationReached()
+    {
+        if (!_destinationReached && _moveBehaviour.GetDestinationReached())
+        {
+            _destinationReached = true;
+            _anim.SetTrigger("Attack");
+        }
     }
 
     private void StartMoving()
@@ -51,7 +74,12 @@ public class Enemy : MonoBehaviour, ITargetable
         _moveBehaviour.Move(moveSpeed);
     }
 
-    private void Vanish(OnPlayerDefeatedEvent onPlayerDefeated)
+    private void TriggerVanish(OnPlayerDefeatedEvent onPlayerDefeated)
+    {
+        Vanish();
+    }
+
+    private void Vanish()
     {
         float dustDuration = 1.0f;
         InstantiateDustParticle(dustDuration);
@@ -82,7 +110,8 @@ public class Enemy : MonoBehaviour, ITargetable
     public void Defeated()
     {
         OnTargetDestroyed?.Invoke(this);
-        Destroy(gameObject);
+        _anim.SetTrigger("Die");
+        _moveBehaviour.Stop();
     }
 
     public Vector3 GetNextPosition(float timeInSeconds)
@@ -112,5 +141,24 @@ public class Enemy : MonoBehaviour, ITargetable
             Instantiate(dustParticle, particlePos, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
         else { Debug.LogError("Tower Prefab: No dustParticle to instantiate"); }
+    }
+
+    // Triggered by animation event
+    public void Death()
+    {
+        // Instantiate floating gold indicator
+        GoldMover gold = Instantiate(goldGainedCanvas, transform.position, Quaternion.identity)
+            .GetComponent<GoldMover>();
+        gold.Initialize(transform.position, rewardAmount);
+
+        EventBus<OnGetGoldEvent>.Publish(new OnGetGoldEvent(rewardAmount));
+
+        Vanish();
+    }
+
+    public void DamagePlayer()
+    {
+        EventBus<OnDamagePlayerEvent>.Publish(new OnDamagePlayerEvent(power));
+        Vanish();
     }
 }

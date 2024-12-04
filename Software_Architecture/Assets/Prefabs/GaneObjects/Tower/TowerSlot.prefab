@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7721818750840327449}
   - component: {fileID: 9000721602750739513}
   - component: {fileID: 9000721602750739514}
+  - component: {fileID: 7540399992485486925}
   m_Layer: 3
   m_Name: TowerSlot
   m_TagString: Untagged
@@ -115,3 +116,16 @@ MonoBehaviour:
   towerPrefab: {fileID: 2789835548394351307, guid: e4b6eecb23ac956489f0d1a0f22085b9, type: 3}
   emergeParticle: {fileID: 232837754777989916, guid: f5550ed9133fdc040882dbbdbacbe927, type: 3}
   riseTime: 1
+--- !u!114 &7540399992485486925
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8082155167885454540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e97128bd7667d6742b6c7839f9456ef4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  menuPrefab: {fileID: 4726502673128555710, guid: 68c9f917fdf0b784cb7143c0407f0318, type: 3}

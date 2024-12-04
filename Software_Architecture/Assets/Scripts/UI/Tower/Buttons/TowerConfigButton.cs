@@ -22,6 +22,7 @@ public class TowerConfigButton : MonoBehaviour
         {
             _currentConfirmWindow.OnConfirmDestroy -= DestructConfirmed;
             _currentConfirmWindow.OnCancelDestroy -= CancelDestruct;
+            Destroy(_currentConfirmWindow.gameObject);
         }
     }
 

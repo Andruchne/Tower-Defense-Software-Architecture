@@ -20,9 +20,9 @@ MonoBehaviour:
   - {fileID: 1625680016397184499, guid: d30decc124f7cdc4a9b9fc8607b7e6fd, type: 3}
   projectileMoveType: 1
   power:
-  - 4
-  - 6
-  - 8
+  - 0
+  - 0
+  - 0
   range:
   - 1.5
   - 1.75

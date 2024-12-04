@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// Keep in mind: This script only works if the object it is attached to, is in the selectable layer
 public class MenuOpener : MonoBehaviour
 {
     public event Action OnMenuOpened;
@@ -21,16 +21,49 @@ public class MenuOpener : MonoBehaviour
     private EventSystem _eventSystem;
 
     private bool _isMenuOpen;
+    private bool _clickable = true;
 
     private void Start()
     {
         _camera = Camera.main;
+
+        EventBus<OnStartBreakTime>.OnEvent += ActivateMenu;
+        EventBus<OnStopBreakTime>.OnEvent += DeactivateMenu;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus<OnStartBreakTime>.OnEvent -= ActivateMenu;
+        EventBus<OnStopBreakTime>.OnEvent -= DeactivateMenu;
     }
 
     void Update()
     {
         OpenCloseMenu();
         UpdateMenuPos();
+    }
+
+    private void DeactivateMenu(OnStopBreakTime onEvent)
+    {
+        _clickable = false;
+
+        OnMenuClosed?.Invoke();
+        Destroy(_currentMenuCanvas);
+        _currentMenuCanvas = null;
+        _isMenuOpen = false;
+    }
+
+    private void ActivateMenu(OnStartBreakTime onEvent)
+    {
+        _clickable = true;
+    }
+
+    private void RemoveCanvas()
+    {
+        OnMenuClosed?.Invoke();
+        Destroy(_currentMenuCanvas);
+        _currentMenuCanvas = null;
+        _isMenuOpen = false;
     }
 
     private void UpdateMenuPos()
@@ -52,6 +85,8 @@ public class MenuOpener : MonoBehaviour
 
     private void OpenCloseMenu()
     {
+        if (!_clickable) { return; }
+
         if (Input.GetMouseButtonDown(0) && IsMouseOverObject())
         {
             if (menuPrefab != null && _currentMenuCanvas == null)
@@ -68,10 +103,7 @@ public class MenuOpener : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0) && _isMenuOpen && !MenuClicked())
         {
-            OnMenuClosed?.Invoke();
-            Destroy(_currentMenuCanvas);
-            _currentMenuCanvas = null;
-            _isMenuOpen = false;
+            RemoveCanvas();
         }
     }
 
@@ -123,5 +155,10 @@ public class MenuOpener : MonoBehaviour
     public GameObject GetCurrentMenu()
     {
         return _currentMenuCanvas;
+    }
+
+    public void SetClickable(bool state)
+    {
+        _clickable = state;
     }
 }

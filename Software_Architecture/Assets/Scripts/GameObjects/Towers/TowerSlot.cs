@@ -27,113 +27,37 @@ public class TowerSlot : MonoBehaviour
     private EventSystem _eventSystem;
 
     private bool _isMenuOpen;
+    private MenuOpener _menuOpener;
 
     private Tweens _tween = new Tweens();
 
     private void Start()
     {
         _camera = Camera.main;
-    }
+        _menuOpener = GetComponent<MenuOpener>();
 
-    private void Update()
-    {
-        OpenCloseMenu();
-        UpdateMenuPos();
+        _menuOpener.OnMenuOpened += GetTypeSelection;
+        _menuOpener.OnMenuClosed += RemoveTypeSelection;
     }
 
     private void OnDestroy()
     {
-        if (_towerTypeSelect != null)
-        {
-            _towerTypeSelect.OnTypeSelected -= TowerSelected;
-        }
+        _menuOpener.OnMenuOpened -= GetTypeSelection;
+        _menuOpener.OnMenuClosed -= RemoveTypeSelection;
     }
 
-    private void OpenCloseMenu()
+    private void GetTypeSelection()
     {
-        if (Input.GetMouseButtonDown(0) && IsMouseOverObject())
-        {
-            if (towerMenuPrefab != null && _currentMenuCanvas == null)
-            {
-                _currentMenuCanvas = Instantiate(towerMenuPrefab, transform);
-
-                // Subscribe to button click event
-                _towerTypeSelect = _currentMenuCanvas.GetComponent<TowerTypeSelection>();
-                _towerTypeSelect.OnTypeSelected += TowerSelected;
-
-                // Get needed elements in order to check for UI mouse input
-                _graphicRaycaster = _currentMenuCanvas.GetComponent<GraphicRaycaster>();
-                _eventSystem = EventSystem.current;
-
-                _isMenuOpen = true;
-            }
-        }
-        else if (Input.GetMouseButtonDown(0) && _isMenuOpen && !TowerMenuClicked())
-        {
-            _towerTypeSelect.OnTypeSelected -= TowerSelected;
-
-            Destroy(_currentMenuCanvas);
-            _currentMenuCanvas = null;
-            _towerTypeSelect = null;
-            _isMenuOpen = false;
-        }
+        _towerTypeSelect = _menuOpener.GetCurrentMenu().GetComponent<TowerTypeSelection>();
+        _towerTypeSelect.OnTypeSelected += TowerSelected;
     }
 
-    private void UpdateMenuPos()
+    private void RemoveTypeSelection()
     {
-        // To keep the window at the position it's supposed to be
-        if (_currentMenuCanvas != null)
-        {
-            Vector3 pos = _camera.WorldToScreenPoint(transform.position);
+        if (_towerTypeSelect == null) { return; }
 
-            if (_currentMenuCanvas.transform.GetChild(0).position != pos)
-            {
-                _currentMenuCanvas.transform.GetChild(0).position = pos;
-            }
-        }
-    }
-
-    private bool IsMouseOverObject()
-    {
-        int layerMask = LayerMask.GetMask("Selectable");
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
-        {
-            if (hit.collider.gameObject == gameObject)
-            {
-                return true;
-            }
-            else if (TowerMenuClicked())
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private bool TowerMenuClicked()
-    {
-        if (_currentMenuCanvas != null)
-        {
-            _pointerEventData = new PointerEventData(_eventSystem);
-            _pointerEventData.position = Input.mousePosition;
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            _graphicRaycaster.Raycast(_pointerEventData, results);
-
-            foreach (RaycastResult result in results)
-            {
-                if (result.gameObject == _currentMenuCanvas.transform.GetChild(0).gameObject)
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
+        _towerTypeSelect.OnTypeSelected -= TowerSelected;
+        _towerTypeSelect = null;
     }
 
     private void TowerSelected(TowerInfo towerInfo)
@@ -157,6 +81,12 @@ public class TowerSlot : MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void ReactivateClickable()
+    {
+        _menuOpener.SetClickable(true);
+        _tween.OnTweenComplete -= ReactivateClickable;
+    }
+
     public void MakeSlotEmerge()
     {
         // Do the shake effect
@@ -171,6 +101,15 @@ public class TowerSlot : MonoBehaviour
             transform.position.z);
 
         _tween.EmergeWithShake(transform, emergeDistance, riseTime);
+        _tween.OnTweenComplete += ReactivateClickable;
+
+        // In case it's called before Start()
+        if (_menuOpener == null) 
+        { 
+            _menuOpener = GetComponent<MenuOpener>(); 
+            if (_menuOpener == null) { return; }
+        }
+        _menuOpener.SetClickable(false);
     }
 
     private void InstantiateDirtParticle(float riseTime)

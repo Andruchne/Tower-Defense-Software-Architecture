@@ -100,6 +100,9 @@ public class Player : MonoBehaviour
     private void DamagePlayer(OnDamagePlayerEvent onDamagePlayerEvent)
     {
         Health -= onDamagePlayerEvent.damage;
+
+        float shakeTime = 0.5f;
+        _tween.Shake(transform, shakeTime);
     }
 
     private void GainGold(OnGetGoldEvent onGetGoldEvent)

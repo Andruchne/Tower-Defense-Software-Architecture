@@ -42,4 +42,21 @@ public class Useful : MonoBehaviour
         // Return total height
         return combinedBounds.size.y;
     }
+
+    public static Transform GetXthParentTransform(Transform transform, int count)
+    {
+        if (count <= 0) { return transform; }
+
+        Transform parent = transform;
+
+        for (int i = 0; i < count; i++)
+        {
+            Transform temp = transform.parent;
+            if (temp == null) { continue; }
+
+            parent = temp;
+        }
+
+        return parent;
+    }
 }

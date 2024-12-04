@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
@@ -282,6 +281,12 @@ public class Tower : MonoBehaviour
     }
 
     // For the spawn Effect
+    private void ReactivateClickable()
+    {
+        _menuOpener.SetClickable(true);
+        _tween.OnTweenComplete -= ReactivateClickable;
+    }
+
     private void MakeTowerEmerge()
     {
         // Do the shake effect
@@ -297,6 +302,15 @@ public class Tower : MonoBehaviour
             transform.position.z);
 
         _tween.EmergeWithShake(transform, emergeDistance, riseTime);
+        _tween.OnTweenComplete += ReactivateClickable;
+
+        // In case it's called before Start()
+        if (_menuOpener == null)
+        {
+            _menuOpener = GetComponentInChildren<MenuOpener>();
+            if (_menuOpener == null) { return; }
+        }
+        _menuOpener.SetClickable(false);
     }
 
     private void InstantiateDirtParticle(float duration)
