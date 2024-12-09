@@ -1,7 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Holds the events, executed by the Tower Config Canvas buttons
+/// It is attached to the most upper transform, of the menu prefab
+/// This makes it easier for the script, which instantiates the menu, to listen to selections
+/// </summary>
 
 public class TowerConfigSelection : MonoBehaviour
 {

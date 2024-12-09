@@ -1,6 +1,9 @@
-using System;
 using UnityEngine;
 using UnityEngine.AI;
+
+/// <summary>
+/// Make an object move, using NavMesh
+/// </summary>
 
 public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
 {

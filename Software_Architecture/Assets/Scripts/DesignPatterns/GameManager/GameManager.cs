@@ -5,6 +5,7 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] float timePerBreak = 60;
 
+    private Player _player;
     private Timer _breakTimer;
 
     #region Singleton Pattern
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        _player = FindObjectOfType<Player>();
+
         _breakTimer = gameObject.AddComponent<Timer>();
         _breakTimer.Initialize(timePerBreak);
 
@@ -98,6 +101,15 @@ public class GameManager : MonoBehaviour
         // Check if next index is valid to load, else reset it to zero
         if (nextSceneIndex >= SceneManager.sceneCount) { nextSceneIndex = 0; }
         SceneManager.LoadScene(nextSceneIndex);
+    }
+    #endregion
+
+    #region Getters
+    public int GetPlayerGold()
+    {
+        if (_player == null) { Debug.LogError("GameManager: No player available"); }
+
+        return _player.GetCurrentGold();
     }
     #endregion
 

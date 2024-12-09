@@ -1,4 +1,10 @@
+using TMPro;
 using UnityEngine;
+
+/// <summary>
+/// Manages the buttons of the screen to manage the tower (upgrade or destroy)
+/// Also handles keeping the menu at the right position
+/// </summary>
 
 public class TowerConfigButton : MonoBehaviour
 {
@@ -9,11 +15,18 @@ public class TowerConfigButton : MonoBehaviour
 
     private TowerConfirmDestroyButton _currentConfirmWindow;
 
+    // For getting amount for refunding/upgrading
+    private CurrentTower _currentTower;
+    private int _refundAmount;
 
     private void Start()
     {
         _towerConfigSelect = GetComponentInParent<TowerConfigSelection>();
         _camera = Camera.main;
+
+        // Not the prettiest way of doing it, but this way, we are informed about the current cost of the tower
+        _currentTower = Useful.GetXthParentTransform(transform, 3).GetComponent<TowerUpgradeDescription>().GetCurrentTower();
+        _refundAmount = _currentTower.info.cost[_currentTower.currentTier] / 2;
     }
 
     private void OnDestroy()
@@ -58,6 +71,7 @@ public class TowerConfigButton : MonoBehaviour
         UnbindConfirmWindowEvents();
         Destroy(_currentConfirmWindow.gameObject);
         Destroy(_towerConfigSelect.gameObject);
+        EventBus<OnGetGoldEvent>.Publish(new OnGetGoldEvent(_refundAmount));
         _towerConfigSelect.InvokeDestruct();
     }
 
@@ -69,6 +83,7 @@ public class TowerConfigButton : MonoBehaviour
 
     public void UpgradeClicked()
     {
+        EventBus<OnWithdrawGoldEvent>.Publish(new OnWithdrawGoldEvent(_currentTower.info.cost[_currentTower.currentTier]));
         _towerConfigSelect.InvokeUpgrade();
         Destroy(_towerConfigSelect.gameObject);
     }
@@ -77,6 +92,8 @@ public class TowerConfigButton : MonoBehaviour
     {
         _currentConfirmWindow = Instantiate(confirmDestructPrefab)
             .GetComponent<TowerConfirmDestroyButton>();
+
+        _currentConfirmWindow.Initialize(_refundAmount);
 
         _currentConfirmWindow.OnConfirmDestroy += DestructConfirmed;
         _currentConfirmWindow.OnCancelDestroy += CancelDestruct;

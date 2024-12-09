@@ -1,8 +1,10 @@
-using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+
+/// <summary>
+/// The tower slot, from which one can buy/select the desired tower
+/// It instantiates the needed menu (TowerTypeSelection), listening to it's events
+/// </summary>
 
 public class TowerSlot : MonoBehaviour
 {
@@ -16,15 +18,9 @@ public class TowerSlot : MonoBehaviour
     [SerializeField] float riseTime = 1.0f;
 
     // To position the menu correctly
-    private Camera _camera;
     private GameObject _currentMenuCanvas;
 
     private TowerTypeSelection _towerTypeSelect;
-
-    // To check mouse position for UI
-    private GraphicRaycaster _graphicRaycaster;
-    private PointerEventData _pointerEventData;
-    private EventSystem _eventSystem;
 
     private bool _isMenuOpen;
     private MenuOpener _menuOpener;
@@ -33,7 +29,6 @@ public class TowerSlot : MonoBehaviour
 
     private void Start()
     {
-        _camera = Camera.main;
         _menuOpener = GetComponent<MenuOpener>();
 
         _menuOpener.OnMenuOpened += GetTypeSelection;

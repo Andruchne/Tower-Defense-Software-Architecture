@@ -1,6 +1,10 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Enemy script, used for any type of enemy
+/// </summary>
+
 [RequireComponent(typeof(HealthComponent))]
 public class Enemy : MonoBehaviour, ITargetable
 {

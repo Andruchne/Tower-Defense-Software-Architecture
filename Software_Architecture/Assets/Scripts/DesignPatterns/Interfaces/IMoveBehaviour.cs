@@ -1,7 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Interface for anything that is supposed to move (e.g. enemies)
+/// </summary>
 
 public interface IMoveBehaviour
 {

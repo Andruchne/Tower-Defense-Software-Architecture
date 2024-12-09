@@ -62,6 +62,14 @@ public class OnGetGoldEvent : Event
     }
     public int goldAmount;
 }
+public class OnWithdrawGoldEvent : Event
+{
+    public OnWithdrawGoldEvent(int amount) 
+    {
+        this.goldAmount = amount;
+    }
+    public int goldAmount;
+}
 public class OnDamagePlayerEvent : Event
 {
     // Invoke to damage player

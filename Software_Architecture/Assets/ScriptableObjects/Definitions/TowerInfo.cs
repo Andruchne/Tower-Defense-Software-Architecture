@@ -18,4 +18,5 @@ public class TowerInfo : ScriptableObject
     public float[] range;
     public float[] attackCooldown;
     public float[] effectRadius;
+    public int[] cost;
 }

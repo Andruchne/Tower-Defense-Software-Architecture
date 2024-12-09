@@ -1,6 +1,10 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
+/// <summary>
+/// Updates all the text, to fit with the current info of the tower tier
+/// Also updates the upgrade button, depending on if the player has enough coins
+/// </summary>
 
 public class TowerUpgradeDescription : MonoBehaviour
 {
@@ -13,9 +17,29 @@ public class TowerUpgradeDescription : MonoBehaviour
     [SerializeField] TextMeshProUGUI[] arrowTexts;
 
     [SerializeField] ExtendedButton upgradeButton;
+    [SerializeField] TextMeshProUGUI upgradeCost;
+
+    // To remove, in case it's max tier
+    [SerializeField] GameObject costParent;
+
+    private CurrentTower _currentTower;
+
+    // Using bool, instead of unsubscribing directly, as SetInfo() happens before Start()
+    private bool _maxxed;
+
+    private void Start()
+    {
+        EventBus<OnGetGoldEvent>.OnEvent += CheckCostAndGold;
+    }
+
+    private void OnDestroy()
+    {
+        EventBus<OnGetGoldEvent>.OnEvent -= CheckCostAndGold;
+    }
 
     public void SetInfo(CurrentTower currentTower)
     {
+        _currentTower = currentTower;
         int tier = currentTower.currentTier;
 
         towerTierText.text = "Tier " + (tier + 1);
@@ -41,6 +65,9 @@ public class TowerUpgradeDescription : MonoBehaviour
             finalNumberTexts[3].text = currentTower.info.effectRadius[tier].ToString();
 
             upgradeButton.interactable = false;
+            Destroy(costParent);
+
+            _maxxed = true;
 
             return;
         }
@@ -60,6 +87,31 @@ public class TowerUpgradeDescription : MonoBehaviour
 
             oldTexts[3].text = currentTower.info.effectRadius[tier].ToString();
             newTexts[3].text = currentTower.info.effectRadius[tier + 1].ToString();
+
+            upgradeCost.text = currentTower.info.cost[tier + 1].ToString();
         }
+
+        CheckButtonState();
+    }
+
+    private void CheckCostAndGold(OnGetGoldEvent onGoldEvent)
+    {
+        CheckButtonState();
+    }
+
+    private void CheckButtonState()
+    {
+        if (_maxxed) { return; }
+
+        if (GameManager.Instance.GetPlayerGold() >= int.Parse(upgradeCost.text))
+        {
+            upgradeButton.interactable = true;
+        }
+        else { upgradeButton.interactable = false; }
+    }
+
+    public CurrentTower GetCurrentTower()
+    {
+        return _currentTower;
     }
 }

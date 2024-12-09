@@ -1,5 +1,11 @@
 using UnityEngine;
 
+/// <summary>
+/// Makes the camera move based on the mouse position along the border
+/// It maps the speed, based on the distance to the borders
+/// Bounds are there to keep the camera inside an area
+/// </summary>
+
 public class CameraMover : MonoBehaviour
 {
     [SerializeField] Vector2 minCameraBounds;
@@ -64,7 +70,6 @@ public class CameraMover : MonoBehaviour
 
         Vector3 targetSpeed = new Vector3(moveVector.x, 0.0f, moveVector.y);
 
-        // Smoothly interpolate to the target speed
         _moveSpeed = Vector3.Lerp(_moveSpeed, targetSpeed, Time.deltaTime * damping);
     }
 

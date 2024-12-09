@@ -3,6 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages the player HUD
+/// In here, it only listens to events, changing the components when invoked
+/// </summary>
+
 public class PlayerHUD : MonoBehaviour
 {
     [SerializeField] Image healthIcon;
@@ -27,6 +32,11 @@ public class PlayerHUD : MonoBehaviour
         EventBus<OnUpdateCurrentTime>.OnEvent -= UpdateTime;
         EventBus<OnUpdateCurrentGold>.OnEvent -= UpdateCurrentGold;
         EventBus<OnStopBreakTime>.OnEvent -= HideTimer;
+    }
+
+    public void Initialize(int startGold)
+    {
+        UpdateCurrentGold(new OnUpdateCurrentGold(startGold));
     }
 
     private void UpdateHealth(OnUpdateCurrentHealth onUpdateCurrentHealth)

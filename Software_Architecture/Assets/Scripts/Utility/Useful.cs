@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Useful methods, used throughout different scripts
+/// </summary>
+
 public class Useful : MonoBehaviour
 {
-    // Recursively get all children, including children of children
+    // Get all children, including children of children
     public static List<GameObject> GetAllChildren(Transform parent)
     {
         List<GameObject> children = new List<GameObject>();
@@ -16,7 +20,7 @@ public class Useful : MonoBehaviour
         return children;
     }
 
-    // Gets the most upper parent, which holds all transforms
+    // Get the most upper parent, which holds all transforms
     public static Transform GetMostUpperTransform(Transform transform)
     {
         Transform upperTransform = transform.parent;
@@ -28,6 +32,7 @@ public class Useful : MonoBehaviour
         return upperTransform;
     }
 
+    // Get the rendered height of the transform
     public static float GetRenderedHeight(Transform transform)
     {
         Bounds combinedBounds = new Bounds(transform.position, Vector3.zero);
@@ -43,6 +48,7 @@ public class Useful : MonoBehaviour
         return combinedBounds.size.y;
     }
 
+    // Get the Xth parent of the transform
     public static Transform GetXthParentTransform(Transform transform, int count)
     {
         if (count <= 0) { return transform; }
@@ -51,7 +57,7 @@ public class Useful : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            Transform temp = transform.parent;
+            Transform temp = parent.parent;
             if (temp == null) { continue; }
 
             parent = temp;

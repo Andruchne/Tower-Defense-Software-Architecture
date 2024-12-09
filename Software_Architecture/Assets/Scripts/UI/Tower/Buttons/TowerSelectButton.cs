@@ -1,15 +1,25 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+/// <summary>
+/// This is the button script, for when a tower type is supposed to be selected
+/// It handles notifying the slot about which tower to build
+/// Checking if it's able to be selected in the first place, is also included here
+/// </summary>
 
 public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] GameObject towerDescriptionPrefab;
     [SerializeField] TowerInfo towerInfo;
+    [SerializeField] TextMeshProUGUI costText;
 
     // Used to position preview next to menu
     [SerializeField] RectTransform menu;
+
+    private ExtendedButton _button;
 
     // To invoke onTypeSelected event
     private TowerTypeSelection _towerTypeSelect;
@@ -25,8 +35,15 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void Start()
     {
+        EventBus<OnGetGoldEvent>.OnEvent += CheckCostAndGold;
+
         _camera = Camera.main;
         _towerTypeSelect = GetComponentInParent<TowerTypeSelection>();
+        _button = GetComponent<ExtendedButton>();
+
+        costText.text = towerInfo.cost[0].ToString();
+
+        CheckButtonState();
     }
 
     private void Update()
@@ -37,6 +54,8 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
     private void OnDestroy()
     {
+        EventBus<OnGetGoldEvent>.OnEvent -= CheckCostAndGold;
+
         if (_currentPreviewCanvas != null)
         {
             Destroy(_currentPreviewCanvas);
@@ -48,6 +67,7 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         if (_towerTypeSelect != null)
         {
             _towerTypeSelect.InvokeTypeSelected(towerInfo);
+            EventBus<OnWithdrawGoldEvent>.Publish(new OnWithdrawGoldEvent(int.Parse(costText.text)));
         }
     }
 
@@ -120,5 +140,19 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         }
 
         return false;
+    }
+
+    private void CheckCostAndGold(OnGetGoldEvent onGoldEvent)
+    {
+        CheckButtonState();
+    }
+
+    private void CheckButtonState()
+    {
+        if (GameManager.Instance.GetPlayerGold() >= int.Parse(costText.text))
+        {
+            _button.interactable = true;
+        }
+        else { _button.interactable = false;  }
     }
 }

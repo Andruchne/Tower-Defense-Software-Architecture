@@ -1,6 +1,11 @@
 using System.ComponentModel;
 using UnityEngine;
 
+/// <summary>
+/// This is the player 
+/// It instantiates the HUD, manages health and gold, and does some tweening, when hit/defeated
+/// </summary>
+
 public class Player : MonoBehaviour
 {
     [SerializeField] GameObject playerHUD;
@@ -9,6 +14,8 @@ public class Player : MonoBehaviour
     [SerializeField] ParticleSystem emergeParticle;
 
     [SerializeField] float maxHealth = 5;
+
+    [SerializeField] int startGold = 200;
 
     // Health
     private float Health
@@ -54,12 +61,14 @@ public class Player : MonoBehaviour
     private void Start()
     {
         Instantiate(playerHUD);
+        playerHUD.GetComponent<PlayerHUD>().Initialize(startGold);
 
+        Gold = startGold;
         Health = maxHealth;
-        Gold = 0;
 
         EventBus<OnDamagePlayerEvent>.OnEvent += DamagePlayer;
         EventBus<OnGetGoldEvent>.OnEvent += GainGold;
+        EventBus<OnWithdrawGoldEvent>.OnEvent += WithdrawGold;
 
         // Keep UI up to date
         EventBus<OnUpdateCurrentGold>.Publish(new OnUpdateCurrentGold(Gold));
@@ -110,6 +119,11 @@ public class Player : MonoBehaviour
         Gold += onGetGoldEvent.goldAmount;
     }
 
+    private void WithdrawGold(OnWithdrawGoldEvent onWithdrawGoldEvent)
+    {
+        Gold -= onWithdrawGoldEvent.goldAmount;
+    }
+
     private void InstantiateDirtParticle(float duration)
     {
         if (emergeParticle != null)
@@ -126,5 +140,10 @@ public class Player : MonoBehaviour
             Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
         else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
+    }
+
+    public int GetCurrentGold()
+    {
+        return Gold;
     }
 }

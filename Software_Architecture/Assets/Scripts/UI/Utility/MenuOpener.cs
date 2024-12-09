@@ -4,6 +4,10 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles opening any menu canvas, at the position of the clicked object
+/// </summary>
+
 // Keep in mind: This script only works if the object it is attached to, is in the selectable layer
 public class MenuOpener : MonoBehaviour
 {
