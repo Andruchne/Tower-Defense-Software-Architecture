@@ -94,6 +94,7 @@ public class Enemy : MonoBehaviour, ITargetable
     public void Hit(float damage)
     {
         _healthComp.Health -= damage;
+        _anim.SetTrigger("Hit");
     }
 
     public void MultiplySpeed(float speedFactor, float duration)

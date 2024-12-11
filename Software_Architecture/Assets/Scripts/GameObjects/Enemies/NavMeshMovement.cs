@@ -7,6 +7,8 @@ using UnityEngine.AI;
 
 public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
 {
+    [SerializeField] float rotateSpeed = 2;
+
     private NavMeshAgent _agent;
     private Vector3 _destination;
 
@@ -22,6 +24,17 @@ public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
     private void Update()
     {
         CheckDestinationReached();
+        RotateToDirection();
+    }
+
+    private void RotateToDirection()
+    {
+        if (_agent.velocity.magnitude > 0.001f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, 
+                Quaternion.LookRotation(_agent.velocity), 
+                Time.deltaTime * rotateSpeed);
+        }
     }
 
     private void CheckDestinationReached()
