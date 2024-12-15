@@ -20,17 +20,17 @@ MonoBehaviour:
   - {fileID: 1625680016397184499, guid: d30decc124f7cdc4a9b9fc8607b7e6fd, type: 3}
   projectileMoveType: 1
   power:
-  - 3
-  - 4
-  - 5
+  - 6
+  - 6.5
+  - 7
   range:
   - 1.5
   - 1.75
   - 2
   attackCooldown:
-  - 5
-  - 5
+  - 4.5
   - 4
+  - 3.5
   effectRadius:
   - 0.75
   - 1

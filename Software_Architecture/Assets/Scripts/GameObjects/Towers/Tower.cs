@@ -297,7 +297,7 @@ public class Tower : MonoBehaviour
         // Don't reactivate, if wave is ongoing
         if (GameManager.Instance.GetWaveActiveState() || _leaveOutClickable) { return; }
 
-        _menuOpener.SetClickable(true);
+        if (_menuOpener != null) { _menuOpener.SetClickable(true); }
         _tween.OnTweenComplete -= ReactivateClickable;
     }
 

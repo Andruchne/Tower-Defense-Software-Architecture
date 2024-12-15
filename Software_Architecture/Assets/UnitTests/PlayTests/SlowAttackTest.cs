@@ -25,17 +25,26 @@ public class SlowAttackTest
         float defaultSpeed = enemies[0].GetCurrentSpeed();
 
         // Wait until an enemy has been defeated
-        float timeLimit = 15.0f;
+        float timeLimit = 20.0f;
         float currentTime = 0.0f;
         bool enemySlowed = false;
+
+        float slowedSpeed = 1.0f;
+        int slowedEnemyIndex = 0;
+
         while (!enemySlowed)
         {
             currentTime += Time.deltaTime;
 
             // Check if an enemy was slowed
-            foreach (Enemy enemy in enemies)
+            for (int i = 0; i < enemies.Count; i++)
             {
-                if (enemy.GetCurrentSpeed() < defaultSpeed) { enemySlowed = true; }
+                if (enemies[i].GetCurrentSpeed() < defaultSpeed)
+                {
+                    enemySlowed = true;
+                    slowedSpeed = enemies[i].GetCurrentSpeed();
+                    slowedEnemyIndex = i;
+                }
             }
 
             if (currentTime >= timeLimit)
@@ -45,6 +54,11 @@ public class SlowAttackTest
             yield return null;
         }
 
-        yield return new WaitForSeconds(0.5f);
+        // Wait for tower to throw slow attack one more time
+        yield return new WaitForSeconds(5.5f);
+
+        // Assuming he gets hit by another slow attack, check if effect doesn't stack
+        Assert.AreEqual(slowedSpeed, enemies[slowedEnemyIndex].GetCurrentSpeed(),
+            "Slow effect stacks on target");
     }
 }
