@@ -67,6 +67,17 @@ public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
         _agent.velocity = Vector3.zero;
     }
 
+    public void MoveWithNoStop(float speed)
+    {
+        _agent.isStopped = false;
+        _moveStarted = true;
+        _destinationReached = false;
+
+        _agent.speed = speed;
+        _agent.acceleration = speed / 2;
+        _agent.SetDestination(_destination);
+    }
+
     public void Stop()
     {
         _agent.velocity = Vector3.zero;

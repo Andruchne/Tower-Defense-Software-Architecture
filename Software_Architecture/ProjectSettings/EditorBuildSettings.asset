@@ -11,4 +11,19 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Level 1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/UnitTests/PathingTest.unity
+    guid: d015ebf2b7b824a4e8afe9511ca7ad61
+  - enabled: 1
+    path: Assets/Scenes/UnitTests/WaveSpawnTest.unity
+    guid: 85f010cb662f95d47b8e3acbb1e12afb
+  - enabled: 1
+    path: Assets/Scenes/UnitTests/SingleTargetAttackTest.unity
+    guid: e2c5497a1fad5fd4181f6ede7ca008cc
+  - enabled: 1
+    path: Assets/Scenes/UnitTests/AOEAttackTest.unity
+    guid: 1a6c40b1be3c20a4f8a2182066290bdf
+  - enabled: 1
+    path: Assets/Scenes/UnitTests/SlowAttackTest.unity
+    guid: 5486e4bad36923d4086a6578cefbbe43
   m_configObjects: {}

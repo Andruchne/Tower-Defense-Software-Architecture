@@ -29,6 +29,7 @@ public class PlatformEaser : MonoBehaviour
     private Dictionary<float, List<PlatformInfo>> _objectDict = new Dictionary<float, List<PlatformInfo>>();
     private int _currentIndex;
 
+    // This is used to synchronize tweened platforms, even when this script is attached to multiple objects
     private int _currentStage;
 
     private Timer _timer;
@@ -54,6 +55,8 @@ public class PlatformEaser : MonoBehaviour
 
     private void Setup()
     {
+        // As these fields are static and values will stay even after restarting scene,
+        // reset them completely on Setup()
         _platformEasers.Clear();
         _activePlatforms = 0;
 

@@ -7,6 +7,7 @@ using UnityEngine;
 public interface IMoveBehaviour
 {
     void Move(float speed = 1);
+    void MoveWithNoStop(float speed = 1);
     void Stop();
     bool GetDestinationReached();
     Vector3 GetNextPosition(float timeInSeconds);

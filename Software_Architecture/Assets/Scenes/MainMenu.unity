@@ -1047,7 +1047,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2167292788572733134, guid: 6bd4df7a11eb73c4ebdf17d898ab64e6, type: 3}
       propertyPath: showCursorAtStart
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2167292788572733135, guid: 6bd4df7a11eb73c4ebdf17d898ab64e6, type: 3}
       propertyPath: m_Name

@@ -44,6 +44,9 @@ public class Tower : MonoBehaviour
 
     private bool _active = true;
 
+    // For Unit Testing
+    private bool _leaveOutClickable;
+
     private void Start()
     {
         _menuOpener = GetComponentInChildren<MenuOpener>();
@@ -292,7 +295,7 @@ public class Tower : MonoBehaviour
     private void ReactivateClickable()
     {
         // Don't reactivate, if wave is ongoing
-        if (GameManager.Instance.GetWaveActiveState()) { return; }
+        if (GameManager.Instance.GetWaveActiveState() || _leaveOutClickable) { return; }
 
         _menuOpener.SetClickable(true);
         _tween.OnTweenComplete -= ReactivateClickable;
@@ -339,5 +342,11 @@ public class Tower : MonoBehaviour
             Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
         else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
+    }
+    
+    // For Unit Testing
+    public void SetClickable(bool clickable)
+    {
+        _leaveOutClickable = true;
     }
 }

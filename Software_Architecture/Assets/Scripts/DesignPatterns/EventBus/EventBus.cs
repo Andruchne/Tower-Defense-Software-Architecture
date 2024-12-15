@@ -150,3 +150,47 @@ public class OnCameraMoved : Event
 }
 
 #endregion
+
+#region Debug
+
+public class OnOneHitEnemies : Event
+{
+    // Invoke to one hit enemies with any attack
+    public OnOneHitEnemies(bool state) 
+    {
+        this.state = state;
+    }
+    public bool state;
+}
+
+public class OnInfiniteRiches : Event
+{
+    // Invoke to have endless gold
+    public OnInfiniteRiches(bool state)
+    {
+        this.state = state;
+    }
+    public bool state;
+}
+
+public class OnImmediateLooser : Event
+{
+    // Invoke to be a looser
+    public OnImmediateLooser(bool state)
+    {
+        this.state = state;
+    }
+    public bool state;
+}
+
+public class OnInvincibleBase : Event
+{
+    // Invoke to be invincible
+    public OnInvincibleBase(bool state)
+    {
+        this.state = state;
+    }
+    public bool state;
+}
+
+#endregion

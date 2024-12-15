@@ -53,8 +53,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void OnDestroy()
     {
-        _healthComp.OnDeath -= Defeated;
-        _moveSpeedAlteredTimer.OnTimerFinished -= ResetSpeed;
+        if (_healthComp != null) { _healthComp.OnDeath -= Defeated; }
+        if (_moveSpeedAlteredTimer != null) { _moveSpeedAlteredTimer.OnTimerFinished -= ResetSpeed; }
         EventBus<OnPlayerDefeatedEvent>.OnEvent -= TriggerVanish;
     }
 
@@ -98,14 +98,15 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         if (_healthComp.Health <= 0) { return; }
 
-        _healthComp.Health -= damage;
+        if (!GameManager.Instance.GetOneShotTargets()) { _healthComp.Health -= damage; }
+        else { _healthComp.Health = 0; }
+
         _anim.SetTrigger("Hit");
     }
 
     public void MultiplySpeed(float speedFactor, float duration)
     {
         moveSpeed = _defaultMoveSpeed * speedFactor;
-        Debug.Log("Set:" + moveSpeed);
         _moveBehaviour.Move(moveSpeed);
 
         _moveSpeedAlteredTimer.SetWaitTime(duration);
@@ -114,9 +115,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void ResetSpeed()
     {
-        Debug.Log("Reset " + moveSpeed);
         moveSpeed = _defaultMoveSpeed;
-        _moveBehaviour.Move(moveSpeed);
+        _moveBehaviour.MoveWithNoStop(moveSpeed);
     }
 
     public void Defeated()
@@ -169,5 +169,16 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         EventBus<OnDamagePlayerEvent>.Publish(new OnDamagePlayerEvent(power));
         Vanish();
+    }
+
+    // For unit test purposes
+    public void DeactivateAttack()
+    {
+        _destinationReached = true;
+    }
+
+    public float GetCurrentSpeed()
+    {
+        return moveSpeed;
     }
 }

@@ -1,9 +1,20 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Wave Manager to update, check and inform, about current wave state
+/// It instantiates enenmies in intervals using the Timer class
+/// EventBus is used, to inform anyone about the waves state, as well as change it accordingly
+/// </summary>
+
 public class WaveManager : MonoBehaviour
 {
+    // This is only used for Unit Testing as of now
+    public event Action<ITargetable> OnEnemySpawned;
+
     [SerializeField] Level levelWave;
+    [SerializeField] bool spawnWaveImmediately;
 
     private GameObject[] _spawnPoints;
     private Timer _timer;
@@ -25,7 +36,7 @@ public class WaveManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        _timer = transform.AddComponent<Timer>();
+        _timer = gameObject.AddComponent<Timer>();
         _timer.OnTimerFinished += SpawnEnemy;
 
         _timer.Initialize(levelWave.intervalPerSpawn[0], true);
@@ -35,6 +46,9 @@ public class WaveManager : MonoBehaviour
 
         GetAllSpawnPoints();
         SafetyChecks();
+
+        // For Unit Testing
+        if (spawnWaveImmediately) { StartTimer(new OnStopBreakTime()); }
     }
 
     private void OnDestroy()
@@ -99,9 +113,10 @@ public class WaveManager : MonoBehaviour
     {
         _spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
     }
+
     private void SpawnEnemy()
     {
-        int randomPos = Random.Range(0, _spawnPoints.Length);
+        int randomPos = UnityEngine.Random.Range(0, _spawnPoints.Length);
         Transform spawnPos = _spawnPoints[randomPos].transform;
 
         GameObject enemyPrefab = levelWave.waves[(int)_currentProgress.x].
@@ -110,6 +125,7 @@ public class WaveManager : MonoBehaviour
 
         ITargetable target = Instantiate(enemyPrefab,spawnPos.position, spawnPos.rotation)
             .GetComponent<ITargetable>();
+        OnEnemySpawned?.Invoke(target);
 
         _targetsInLevel++;
         target.OnTargetDestroyed += DiscardTarget;
@@ -186,5 +202,11 @@ public class WaveManager : MonoBehaviour
     public bool IsActive()
     {
         return _timer.GetActive();
+    }
+
+    // For Unit Testing
+    public Level GetLevel()
+    {
+        return levelWave;
     }
 }

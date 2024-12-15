@@ -29,13 +29,15 @@ public class Player : MonoBehaviour
         }
         set
         {
+            if (_invincible) { return; }
+
             // Player defeated
             if (value <= 0) { Defeated(); }
 
             _health = Mathf.Clamp(value, 0, maxHealth);
 
             // Inform UI
-            EventBus<OnUpdateCurrentHealth>.Publish(new OnUpdateCurrentHealth(value / maxHealth));
+            EventBus<OnUpdateCurrentHealth>.Publish(new OnUpdateCurrentHealth(_health / maxHealth));
         }
     }
     private float _health;
@@ -49,11 +51,13 @@ public class Player : MonoBehaviour
         }
         set
         {
-            _gold = value;
+            if (!_infiniteRiches) { _gold = value; }
+            else { _gold = 9999; }
+
             if (_gold < 0) { _gold = 0; }
 
             // Inform UI
-            EventBus<OnUpdateCurrentGold>.Publish(new OnUpdateCurrentGold(value));
+            EventBus<OnUpdateCurrentGold>.Publish(new OnUpdateCurrentGold(_gold));
         }
     }
     private int _gold;
@@ -62,7 +66,14 @@ public class Player : MonoBehaviour
     private bool _defeated;
 
     // Used to transition, after having won
-    Timer _timer;
+    private Timer _timer;
+
+    // Debugging
+    private bool _infiniteRiches;
+    private int _oldGold;
+    private bool _invincible;
+
+    private bool _loadedIn;
 
     private void Start()
     {
@@ -73,6 +84,7 @@ public class Player : MonoBehaviour
         Instantiate(playerHUD);
         playerHUD.GetComponent<PlayerHUD>().Initialize(startGold);
 
+        _oldGold = startGold;
         Gold = startGold;
         Health = maxHealth;
 
@@ -81,6 +93,11 @@ public class Player : MonoBehaviour
         EventBus<OnWithdrawGoldEvent>.OnEvent += WithdrawGold;
         EventBus<OnPlayerHUDLoaded>.OnEvent += PlayerHUDLoaded;
         EventBus<OnLevelWon>.OnEvent += QueueFanfare;
+
+        EventBus<OnInfiniteRiches>.OnEvent += SetInfiniteRiches;
+        EventBus<OnInvincibleBase>.OnEvent += SetInvincible;
+        EventBus<OnImmediateLooser>.OnEvent += SetLooser;
+        EventBus<OnLevelLoadedEvent>.OnEvent += FinishedLoading;
     }
 
     private void OnDestroy()
@@ -90,6 +107,13 @@ public class Player : MonoBehaviour
         EventBus<OnWithdrawGoldEvent>.OnEvent -= WithdrawGold;
         EventBus<OnPlayerHUDLoaded>.OnEvent -= PlayerHUDLoaded;
         EventBus<OnLevelWon>.OnEvent -= QueueFanfare;
+
+        EventBus<OnInfiniteRiches>.OnEvent -= SetInfiniteRiches;
+        EventBus<OnInvincibleBase>.OnEvent -= SetInvincible;
+        EventBus<OnImmediateLooser>.OnEvent -= SetLooser;
+        EventBus<OnLevelLoadedEvent>.OnEvent -= FinishedLoading;
+
+        EventBus<OnLevelLoadedEvent>.OnEvent -= LooseAfterLoad;
 
         _tween.OnTweenComplete -= PlayerSubmerged;
         _timer.OnTimerFinished -= FinishGame;
@@ -179,5 +203,43 @@ public class Player : MonoBehaviour
     public int GetCurrentGold()
     {
         return Gold;
+    }
+
+    // Debugging
+    private void SetInfiniteRiches(OnInfiniteRiches onInfiniteRiches)
+    {
+        _infiniteRiches = onInfiniteRiches.state;
+        
+        if (_infiniteRiches)
+        {
+            _oldGold = Gold;
+            Gold = 9999;
+        }
+        else { Gold = _oldGold; }
+    }
+
+    private void SetInvincible(OnInvincibleBase onInvincibleBase)
+    {
+        _invincible = onInvincibleBase.state;
+    }
+
+    private void SetLooser(OnImmediateLooser onImmediateLooser)
+    {
+        if (onImmediateLooser.state)
+        {
+            if (!_loadedIn) { EventBus<OnLevelLoadedEvent>.OnEvent += LooseAfterLoad; }
+            else { Health = 0; }
+        }
+    }
+
+    private void LooseAfterLoad(OnLevelLoadedEvent onLevelLoadedEvent)
+    {
+        EventBus<OnLevelLoadedEvent>.OnEvent -= LooseAfterLoad;
+        Health = 0;
+    }
+
+    private void FinishedLoading(OnLevelLoadedEvent onLevelLoadedEvent)
+    {
+        _loadedIn = true;
     }
 }

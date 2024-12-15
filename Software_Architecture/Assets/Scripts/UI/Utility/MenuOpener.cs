@@ -186,6 +186,8 @@ public class MenuOpener : MonoBehaviour
 
     private void SetSelectability(bool selectable)
     {
+        if (gameObject == null) { return; } 
+
         if (selectable) { gameObject.layer = _selectableIndex; }
         else { gameObject.layer = 0; }
     }

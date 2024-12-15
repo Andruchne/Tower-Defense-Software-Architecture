@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2167292788572733133}
   - component: {fileID: 2167292788572733134}
+  - component: {fileID: 4106469322612077896}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,4 +45,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384edcf6b5d3c53448541c72ac9bf497, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timePerBreak: 31
+  timePerBreak: 46
+  showCursorAtStart: 1
+--- !u!114 &4106469322612077896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2167292788572733135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ede7e80df059de845aa78be3ab5b03b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  oneHitEnemies: 0
+  infiniteRiches: 0
+  immediateLooser: 0
+  invincibleBase: 0

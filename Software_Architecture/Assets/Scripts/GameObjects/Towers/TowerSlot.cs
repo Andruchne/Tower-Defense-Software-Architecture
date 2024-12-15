@@ -17,6 +17,11 @@ public class TowerSlot : MonoBehaviour
     [Description("Is only used when emerge is called on this slot")]
     [SerializeField] float riseTime = 1.0f;
 
+    [Space]
+    [Header("Unit Test Settings [ Leave empty if not needed ]")]
+    [SerializeField] bool initializeAtStart;
+    [SerializeField] TowerInfo tower2B;
+
     // To position the menu correctly
     private GameObject _currentMenuCanvas;
 
@@ -33,6 +38,8 @@ public class TowerSlot : MonoBehaviour
 
         _menuOpener.OnMenuOpened += GetTypeSelection;
         _menuOpener.OnMenuClosed += RemoveTypeSelection;
+
+        if (initializeAtStart) { TowerSelected(tower2B); }
     }
 
     private void OnDestroy()
@@ -73,6 +80,9 @@ public class TowerSlot : MonoBehaviour
 
         Tower tower = towerHolder.GetComponent<Tower>();
         tower.Initialize(towerInfo);
+
+        // For Unit Testing
+        if (initializeAtStart) { tower.SetClickable(false); }
 
         Destroy(gameObject);
     }

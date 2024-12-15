@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 
     private Timer _breakTimer;
 
+    private bool _oneShotTargets;
+
     #region Singleton Pattern
     public static GameManager Instance { get; private set; }
     private void Awake()
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        if (showCursorAtStart) { ToggleCursorState(new OnLevelLoadedEvent()); }
+
         _player = FindObjectOfType<Player>();
         _waveManager = FindObjectOfType<WaveManager>();
 
@@ -43,6 +47,8 @@ public class GameManager : MonoBehaviour
         EventBus<OnLevelFinishedEvent>.OnEvent += ToggleCursorState;
         EventBus<OnQueueUpBreakTime>.OnEvent += StartBreak;
         EventBus<OnStopBreakTimeEarly>.OnEvent += StopBreakEarly;
+
+        EventBus<OnOneHitEnemies>.OnEvent += SetOneShot;
 
         _breakTimer.OnTimerRunning += UpdateTimeHUD;
         _breakTimer.OnTimerFinished += StopBreak;
@@ -64,6 +70,8 @@ public class GameManager : MonoBehaviour
         EventBus<OnLevelFinishedEvent>.OnEvent -= ToggleCursorState;
         EventBus<OnQueueUpBreakTime>.OnEvent -= StartBreak;
         EventBus<OnStopBreakTimeEarly>.OnEvent -= StopBreakEarly;
+
+        EventBus<OnOneHitEnemies>.OnEvent -= SetOneShot;
 
         if (_breakTimer != null)
         {
@@ -126,16 +134,29 @@ public class GameManager : MonoBehaviour
     #region Getters
     public int GetPlayerGold()
     {
-        if (_player == null) { Debug.LogError("GameManager: No player available"); }
+        if (_player == null) 
+        { 
+            Debug.LogError("GameManager: No player available");
+            return 0;
+        }
 
         return _player.GetCurrentGold();
     }
 
     public bool GetWaveActiveState()
     {
-        if (_waveManager == null) { Debug.LogError("GameManager: No waveManager available"); }
+        if (_waveManager == null) 
+        { 
+            Debug.LogError("GameManager: No waveManager available");
+            return false;
+        }
 
         return _waveManager.IsActive();
+    }
+
+    public bool GetOneShotTargets()
+    {
+        return _oneShotTargets;
     }
     #endregion
 
@@ -146,5 +167,14 @@ public class GameManager : MonoBehaviour
         if (Cursor.lockState == CursorLockMode.None) { Cursor.lockState = CursorLockMode.Locked; }
         else { Cursor.lockState = CursorLockMode.None; }
     }
+    #endregion
+
+    #region Debugging
+
+    private void SetOneShot(OnOneHitEnemies onOneHitEnemies)
+    {
+        _oneShotTargets = onOneHitEnemies.state;
+    }
+
     #endregion
 }
