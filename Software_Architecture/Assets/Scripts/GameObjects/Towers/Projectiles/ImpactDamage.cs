@@ -8,6 +8,10 @@ public class ImpactDamage : MonoBehaviour
     // Timer to destroy collider earlier
     private Timer _timer;
 
+    // For single target
+    private bool _singleTarget;
+    private bool _targetHit;
+
     private void Update()
     {
         DestroyOnFinish();
@@ -18,7 +22,7 @@ public class ImpactDamage : MonoBehaviour
         _timer.OnTimerFinished -= DestroyCollider;
     }
 
-    public void Initialize(CurrentTower currentTower)
+    public void Initialize(CurrentTower currentTower, bool singleTarget = false)
     {
         _timer = gameObject.AddComponent<Timer>();
         _timer.Initialize(0.1f, false, true);
@@ -26,7 +30,8 @@ public class ImpactDamage : MonoBehaviour
 
         _impactParticleSystems = GetComponentsInChildren<ParticleSystem>();
 
-        this._currentTower = currentTower;
+        _currentTower = currentTower;
+        _singleTarget = singleTarget;
         SetImpactRadius();
     }
 
@@ -73,11 +78,15 @@ public class ImpactDamage : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (_targetHit) { return; }
+
         ITargetable target = other.GetComponent<ITargetable>();
 
         if (target != null)
         {
             EnemyEntered(target);
+
+            if (_singleTarget) { _targetHit = true; }
         }
     }
 }

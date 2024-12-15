@@ -48,7 +48,7 @@ public class TowerConfigButton : MonoBehaviour
     {
         if (_currentConfirmWindow != null)
         {
-            Vector3 pos = _camera.WorldToScreenPoint(Useful.GetMostUpperTransform(transform).position);
+            Vector3 pos = _camera.WorldToScreenPoint(Useful.GetXthParentTransform(transform, 5).position);
 
             for (int i = 0; i < _currentConfirmWindow.transform.childCount; i++)
             {

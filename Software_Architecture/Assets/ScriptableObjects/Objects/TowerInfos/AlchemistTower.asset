@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cfead3c118916a448899d86bddcbf4a, type: 3}
+  m_Name: AlchemistTower
+  m_EditorClassIdentifier: 
+  towerTypeName: Alchemy Tower
+  attackType: {fileID: 11400000, guid: dccde31d1c8c481478982a55445c5b7a, type: 2}
+  towerModel:
+  - {fileID: 2678298829810047945, guid: 8b726248cbe37874994d7496b2649702, type: 3}
+  - {fileID: 4438430584934002109, guid: 79ca24387b09ec84c966b29e77bc4b49, type: 3}
+  - {fileID: 1625680016397184499, guid: d30decc124f7cdc4a9b9fc8607b7e6fd, type: 3}
+  projectileMoveType: 1
+  power:
+  - 3
+  - 4
+  - 5
+  range:
+  - 1.5
+  - 1.75
+  - 2
+  attackCooldown:
+  - 5
+  - 5
+  - 4
+  effectRadius:
+  - 0.75
+  - 1
+  - 1.25
+  cost: 96000000c80000002c010000

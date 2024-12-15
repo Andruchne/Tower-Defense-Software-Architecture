@@ -9,5 +9,5 @@ public interface IMoveBehaviour
     void Move(float speed = 1);
     void Stop();
     bool GetDestinationReached();
-    Vector3 GetCurrentVelocity();
+    Vector3 GetNextPosition(float timeInSeconds);
 }

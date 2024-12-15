@@ -13,6 +13,9 @@ public class Player : MonoBehaviour
     [Description("Particle which is instantiated when tower submerges")]
     [SerializeField] ParticleSystem emergeParticle;
 
+    [Description("Particle which is instantiated when game is won")]
+    [SerializeField] ParticleSystem fireworkParticle;
+
     [SerializeField] float maxHealth = 5;
 
     [SerializeField] int startGold = 200;
@@ -58,8 +61,15 @@ public class Player : MonoBehaviour
     private Tweens _tween = new Tweens();
     private bool _defeated;
 
+    // Used to transition, after having won
+    Timer _timer;
+
     private void Start()
     {
+        _timer = gameObject.AddComponent<Timer>();
+        _timer.Initialize(5, false);
+        _timer.OnTimerFinished += FinishGame;
+
         Instantiate(playerHUD);
         playerHUD.GetComponent<PlayerHUD>().Initialize(startGold);
 
@@ -69,18 +79,32 @@ public class Player : MonoBehaviour
         EventBus<OnDamagePlayerEvent>.OnEvent += DamagePlayer;
         EventBus<OnGetGoldEvent>.OnEvent += GainGold;
         EventBus<OnWithdrawGoldEvent>.OnEvent += WithdrawGold;
-
-        // Keep UI up to date
-        EventBus<OnUpdateCurrentGold>.Publish(new OnUpdateCurrentGold(Gold));
-        EventBus<OnUpdateCurrentHealth>.Publish(new OnUpdateCurrentHealth(Health / maxHealth));
+        EventBus<OnPlayerHUDLoaded>.OnEvent += PlayerHUDLoaded;
+        EventBus<OnLevelWon>.OnEvent += QueueFanfare;
     }
 
     private void OnDestroy()
     {
         EventBus<OnDamagePlayerEvent>.OnEvent -= DamagePlayer;
         EventBus<OnGetGoldEvent>.OnEvent -= GainGold;
+        EventBus<OnWithdrawGoldEvent>.OnEvent -= WithdrawGold;
+        EventBus<OnPlayerHUDLoaded>.OnEvent -= PlayerHUDLoaded;
+        EventBus<OnLevelWon>.OnEvent -= QueueFanfare;
 
         _tween.OnTweenComplete -= PlayerSubmerged;
+        _timer.OnTimerFinished -= FinishGame;
+    }
+
+    private void FinishGame()
+    {
+        EventBus<OnLevelFinishedEvent>.Publish(new OnLevelFinishedEvent());
+    }
+
+    private void PlayerHUDLoaded(OnPlayerHUDLoaded onPlayerHUDLoaded)
+    {
+        // Keep UI up to date
+        EventBus<OnUpdateCurrentGold>.Publish(new OnUpdateCurrentGold(Gold));
+        EventBus<OnUpdateCurrentHealth>.Publish(new OnUpdateCurrentHealth(Health / maxHealth));
     }
 
     private void Defeated()
@@ -139,7 +163,17 @@ public class Player : MonoBehaviour
 
             Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
-        else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
+        else { Debug.LogError("Player: No emergeParticle to instantiate"); }
+    }
+
+    private void QueueFanfare(OnLevelWon onLevelWon)
+    {
+        if (emergeParticle != null)
+        {
+            Instantiate(fireworkParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
+            _timer.StartTimer();
+        }
+        else { Debug.LogError("Player: No fireworkParticle to instantiate"); }
     }
 
     public int GetCurrentGold()

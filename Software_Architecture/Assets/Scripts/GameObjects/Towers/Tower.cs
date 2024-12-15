@@ -2,6 +2,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 
+/// <summary>
+/// The actual tower, which attacks the enemies
+/// Based on the towerInfo provided in Initialize, it will change it's model, attack, and stats
+/// Every tower, no matter which type, uses this script
+/// </summary>
+
 public class Tower : MonoBehaviour
 {
     [Description("Decides how long the shot projectile needs to reach the targetPos (In seconds)")]
@@ -159,7 +165,7 @@ public class Tower : MonoBehaviour
             }
         }
         // Instantiate new one
-        GameObject newModel = Instantiate(_currentTower.info.towerModel[_currentTower.currentTier], transform);
+        GameObject newModel = Instantiate(_currentTower.info.towerModel[_currentTower.currentTier], transform.GetChild(0));
         _projectileOrigin = GetProjectileOrigin(newModel.transform);
 
         // Shake a bit
@@ -187,10 +193,12 @@ public class Tower : MonoBehaviour
     private void DestroyTower()
     {
         _tween.OnTweenComplete -= DestroyTower;
+
         // Calculate position before submerging
         TowerSlot slot = Instantiate(towerSlot, 
-            new Vector3(transform.position.x, transform.position.y + Useful.GetRenderedHeight(transform) + 0.05f, transform.position.z), 
-            transform.rotation).GetComponent<TowerSlot>();
+            new Vector3(transform.position.x, 0.2f, transform.position.z), 
+            transform.rotation,
+            transform.parent).GetComponent<TowerSlot>();
         slot.MakeSlotEmerge();
         Destroy(gameObject);
     }
@@ -283,6 +291,9 @@ public class Tower : MonoBehaviour
     // For the spawn Effect
     private void ReactivateClickable()
     {
+        // Don't reactivate, if wave is ongoing
+        if (GameManager.Instance.GetWaveActiveState()) { return; }
+
         _menuOpener.SetClickable(true);
         _tween.OnTweenComplete -= ReactivateClickable;
     }
@@ -291,9 +302,8 @@ public class Tower : MonoBehaviour
     {
         // Do the shake effect
         float towerHeight = Useful.GetRenderedHeight(transform);
-        float additionalOffset = 0.05f;
 
-        float emergeDistance = towerHeight + additionalOffset;
+        float emergeDistance = towerHeight;
 
         InstantiateDirtParticle(riseTime);
 

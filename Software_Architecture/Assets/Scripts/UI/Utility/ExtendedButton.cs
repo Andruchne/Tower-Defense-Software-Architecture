@@ -60,6 +60,17 @@ public class ExtendedButton : Button
         {
             Color textColor = text.color;
 
+            // Apply color
+            if (instant)
+            {
+                text.color = tintColor;
+            }
+            else
+            {
+                text.CrossFadeColor(tintColor, colors.fadeDuration, true, false);
+            }
+
+            // Apply alpha propely
             if (tintColor.a < 1.0f)
             {
                 // Dividing alpha, as text opacity is barely visible at higher values

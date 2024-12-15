@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     public enum ProjectileMoveType { Straight, Curved }
 
     [SerializeField] GameObject impactPrefab;
+    [SerializeField] bool singleTarget;
 
     private CurrentTower _currentTower;
 
@@ -43,7 +44,7 @@ public class Projectile : MonoBehaviour
                 Quaternion.identity).GetComponent<ImpactDamage>();
 
             // Safety check
-            if (impact != null) { impact.Initialize(_currentTower); }
+            if (impact != null) { impact.Initialize(_currentTower, singleTarget); }
             else { Debug.LogError("Impact Prefab " + impactPrefab.name + ": Prefab has no impact script attached"); }
 
             // Set radius to whatever impact range was given

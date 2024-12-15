@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// Handles opening any menu canvas, at the position of the clicked object
@@ -27,29 +28,36 @@ public class MenuOpener : MonoBehaviour
     private bool _isMenuOpen;
     private bool _clickable = true;
 
+    // Used to switch between selectable and unselectable states
+    private LayerMask _selectableIndex;
+
     private void Start()
     {
         _camera = Camera.main;
+        _selectableIndex = LayerMask.NameToLayer("Selectable");
 
-        EventBus<OnStartBreakTime>.OnEvent += ActivateMenu;
+        EventBus<OnStartedBreakTime>.OnEvent += ActivateMenu;
         EventBus<OnStopBreakTime>.OnEvent += DeactivateMenu;
+
+        EventBus<OnCameraMoved>.OnEvent += MoveUIWithCamera;
     }
 
     private void OnDestroy()
     {
-        EventBus<OnStartBreakTime>.OnEvent -= ActivateMenu;
+        EventBus<OnStartedBreakTime>.OnEvent -= ActivateMenu;
         EventBus<OnStopBreakTime>.OnEvent -= DeactivateMenu;
+
+        EventBus<OnCameraMoved>.OnEvent -= MoveUIWithCamera;
     }
 
     void Update()
     {
         OpenCloseMenu();
-        UpdateMenuPos();
     }
 
     private void DeactivateMenu(OnStopBreakTime onEvent)
     {
-        _clickable = false;
+        SetClickable(false);
 
         OnMenuClosed?.Invoke();
         Destroy(_currentMenuCanvas);
@@ -57,9 +65,9 @@ public class MenuOpener : MonoBehaviour
         _isMenuOpen = false;
     }
 
-    private void ActivateMenu(OnStartBreakTime onEvent)
+    private void ActivateMenu(OnStartedBreakTime onEvent)
     {
-        _clickable = true;
+        SetClickable(true);
     }
 
     private void RemoveCanvas()
@@ -103,11 +111,15 @@ public class MenuOpener : MonoBehaviour
 
                 _isMenuOpen = true;
                 OnMenuOpened?.Invoke();
+                SetSelectability(false);
+
+                UpdateMenuPos();
             }
         }
         else if (Input.GetMouseButtonDown(0) && _isMenuOpen && !MenuClicked())
         {
             RemoveCanvas();
+            SetSelectability(true);
         }
     }
 
@@ -156,13 +168,25 @@ public class MenuOpener : MonoBehaviour
         return false;
     }
 
+    private void MoveUIWithCamera(OnCameraMoved onCameraMoved)
+    {
+        UpdateMenuPos();
+    }
+
     public GameObject GetCurrentMenu()
     {
         return _currentMenuCanvas;
     }
 
-    public void SetClickable(bool state)
+    public void SetClickable(bool clickable)
     {
-        _clickable = state;
+        _clickable = clickable;
+        SetSelectability(clickable);
+    }
+
+    private void SetSelectability(bool selectable)
+    {
+        if (selectable) { gameObject.layer = _selectableIndex; }
+        else { gameObject.layer = 0; }
     }
 }

@@ -76,8 +76,12 @@ public class CameraMover : MonoBehaviour
     private void MoveCamera()
     {
         Vector3 movement = _moveSpeed * Time.deltaTime;
-        transform.position += movement;
 
+        // Notify everyone listening about movements
+        // This is used to update UI, only when the camera actually moved
+        if (movement.magnitude > 0) { EventBus<OnCameraMoved>.Publish(new OnCameraMoved()); }
+
+        transform.position += movement;
         ClampPosition();
     }
 

@@ -61,14 +61,15 @@ public class TowerSlot : MonoBehaviour
         Transform towerHolder = Instantiate(
             towerPrefab,
             transform.position,
-            transform.rotation).transform;
+            transform.rotation,
+            transform.parent).transform;
 
         // Instantiate tower model seperately and add to tower holder
         Instantiate(
             towerInfo.towerModel[0],
             transform.position,
             Quaternion.identity,
-            towerHolder);
+            towerHolder.GetChild(0));
 
         Tower tower = towerHolder.GetComponent<Tower>();
         tower.Initialize(towerInfo);

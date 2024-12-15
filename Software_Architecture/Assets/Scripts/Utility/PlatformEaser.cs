@@ -54,6 +54,9 @@ public class PlatformEaser : MonoBehaviour
 
     private void Setup()
     {
+        _platformEasers.Clear();
+        _activePlatforms = 0;
+
         _platformEasers.Add(this);
 
         for (int i = 0; i < transform.childCount; i++)

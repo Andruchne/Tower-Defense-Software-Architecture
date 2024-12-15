@@ -25,6 +25,8 @@ public class GoldMover : MonoBehaviour
         _image = _goldToMove.GetChild(1).GetComponent<Image>();
 
         _text.text = "+" + _goldAmount.ToString();
+
+        UpdateTextPos();
     }
 
     public void Initialize(Vector3 position, int amount)

@@ -23,7 +23,6 @@ public class Enemy : MonoBehaviour, ITargetable
     private HealthComponent _healthComp;
 
     private Animator _anim;
-
     private bool _destinationReached;
 
     private void Start()
@@ -32,7 +31,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
         _defaultMoveSpeed = moveSpeed;
         _moveSpeedAlteredTimer = gameObject.AddComponent<Timer>();
-        _moveSpeedAlteredTimer.Initialize(0);
+        _moveSpeedAlteredTimer.Initialize(3);
         _moveSpeedAlteredTimer.OnTimerFinished += ResetSpeed;
 
         _healthComp = GetComponent<HealthComponent>();
@@ -68,6 +67,9 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         if (!_destinationReached && _moveBehaviour.GetDestinationReached())
         {
+            OnTargetDestroyed?.Invoke(this);
+            _healthComp.RemoveUI();
+
             _destinationReached = true;
             _anim.SetTrigger("Attack");
         }
@@ -80,6 +82,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     private void TriggerVanish(OnPlayerDefeatedEvent onPlayerDefeated)
     {
+        OnTargetDestroyed?.Invoke(this);
         Vanish();
     }
 
@@ -93,6 +96,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float damage)
     {
+        if (_healthComp.Health <= 0) { return; }
+
         _healthComp.Health -= damage;
         _anim.SetTrigger("Hit");
     }
@@ -100,6 +105,7 @@ public class Enemy : MonoBehaviour, ITargetable
     public void MultiplySpeed(float speedFactor, float duration)
     {
         moveSpeed = _defaultMoveSpeed * speedFactor;
+        Debug.Log("Set:" + moveSpeed);
         _moveBehaviour.Move(moveSpeed);
 
         _moveSpeedAlteredTimer.SetWaitTime(duration);
@@ -108,12 +114,14 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void ResetSpeed()
     {
+        Debug.Log("Reset " + moveSpeed);
         moveSpeed = _defaultMoveSpeed;
         _moveBehaviour.Move(moveSpeed);
     }
 
     public void Defeated()
     {
+        _healthComp.RemoveUI();
         OnTargetDestroyed?.Invoke(this);
         _anim.SetTrigger("Die");
         _moveBehaviour.Stop();
@@ -121,12 +129,7 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public Vector3 GetNextPosition(float timeInSeconds)
     {
-        Vector3 currentVelocity = _moveBehaviour.GetCurrentVelocity();
-        float distance = currentVelocity.magnitude * timeInSeconds;
-
-        Vector3 predictedPosition = transform.position + currentVelocity.normalized * distance;
-
-        return predictedPosition;
+        return _moveBehaviour.GetNextPosition(timeInSeconds);
     }
 
     private void InstantiateDustParticle(float duration)
@@ -154,6 +157,7 @@ public class Enemy : MonoBehaviour, ITargetable
         // Instantiate floating gold indicator
         GoldMover gold = Instantiate(goldGainedCanvas, transform.position, Quaternion.identity)
             .GetComponent<GoldMover>();
+        
         gold.Initialize(transform.position, rewardAmount);
 
         EventBus<OnGetGoldEvent>.Publish(new OnGetGoldEvent(rewardAmount));

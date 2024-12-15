@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d25189ade3dba82448a0803541d4e54a, type: 3}
+  m_Name: Beholder
+  m_EditorClassIdentifier: 
+  enemyName: Beholder
+  enemyPrefab: {fileID: 7234699454089206411, guid: 7d1fccc380758e4499f868f9efa32df5, type: 3}

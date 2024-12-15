@@ -14,16 +14,19 @@ public class PlayerHUD : MonoBehaviour
 
     [SerializeField] GameObject timeHolder;
     [SerializeField] TextMeshProUGUI timeText;
-
     [SerializeField] TextMeshProUGUI goldText;
+    [SerializeField] TextMeshProUGUI waveText;
 
     private void Start()
     {
         EventBus<OnUpdateCurrentHealth>.OnEvent += UpdateHealth;
         EventBus<OnUpdateCurrentTime>.OnEvent += UpdateTime;
         EventBus<OnUpdateCurrentGold>.OnEvent += UpdateCurrentGold;
+        EventBus<OnUpdateCurrentWave>.OnEvent += UpdateWave;
         EventBus<OnStopBreakTime>.OnEvent += HideTimer;
         timeHolder.SetActive(false);
+
+        EventBus<OnPlayerHUDLoaded>.Publish(new OnPlayerHUDLoaded());
     }
 
     private void OnDestroy()
@@ -31,6 +34,7 @@ public class PlayerHUD : MonoBehaviour
         EventBus<OnUpdateCurrentHealth>.OnEvent -= UpdateHealth;
         EventBus<OnUpdateCurrentTime>.OnEvent -= UpdateTime;
         EventBus<OnUpdateCurrentGold>.OnEvent -= UpdateCurrentGold;
+        EventBus<OnUpdateCurrentWave>.OnEvent -= UpdateWave;
         EventBus<OnStopBreakTime>.OnEvent -= HideTimer;
     }
 
@@ -56,6 +60,11 @@ public class PlayerHUD : MonoBehaviour
 
         string time = string.Format("{0:0}:{1:00}", minutes, seconds);
         timeText.text = time;
+    }
+
+    private void UpdateWave(OnUpdateCurrentWave onUpdateCurrentWave)
+    {
+        waveText.text = string.Format("{0}/{1}", onUpdateCurrentWave.currentWave, onUpdateCurrentWave.maxWave);
     }
 
     private void UpdateCurrentGold(OnUpdateCurrentGold onUpdateCurrentGold)

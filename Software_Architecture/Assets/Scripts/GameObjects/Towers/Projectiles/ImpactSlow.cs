@@ -1,6 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+/// <summary>
+/// Slows the enemies in range, instead of damaging them
+/// The power decides, how long this effect lasts
+/// </summary>
 
 public class ImpactSlow : ImpactDamage
 {

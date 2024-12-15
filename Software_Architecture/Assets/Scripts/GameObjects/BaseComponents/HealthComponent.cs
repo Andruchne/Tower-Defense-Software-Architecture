@@ -41,6 +41,7 @@ public class HealthComponent : MonoBehaviour
         { 
             _healthBarWindow = Instantiate(healthBarPrefab).transform;
             _healthBar = _healthBarWindow.GetComponent<HealthBar>();
+            UpdateHealthBarPos();
         }
     }
 
@@ -61,5 +62,10 @@ public class HealthComponent : MonoBehaviour
             Vector3 pos = _camera.WorldToScreenPoint(transform.position) + new Vector3(0, _height, 0);
             _healthBarWindow.GetChild(0).position = pos;
         }
+    }
+
+    public void RemoveUI()
+    {
+        if (_healthBarWindow != null) { Destroy(_healthBarWindow.gameObject); }
     }
 }

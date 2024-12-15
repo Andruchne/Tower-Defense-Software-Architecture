@@ -79,8 +79,47 @@ public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
         return _destinationReached;
     }
 
-    public Vector3 GetCurrentVelocity()
+    public Vector3 GetNextPosition(float timeInSeconds)
     {
-        return _agent.velocity;
+        // Get the current path of the NavMeshAgent
+        NavMeshPath path = _agent.path;
+
+        // If the path is not ready or has no corners, return the current position
+        if (path.corners.Length <= 1)
+        {
+            return transform.position;
+        }
+
+        // Find the closest corner on the path to the current position
+        int closestCornerIndex = 0;
+        float closestDistance = Vector3.Distance(transform.position, path.corners[0]);
+        for (int i = 1; i < path.corners.Length; i++)
+        {
+            float distance = Vector3.Distance(transform.position, path.corners[i]);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestCornerIndex = i;
+            }
+        }
+
+        // Calculate the distance the agent will travel in the prediction time
+        float distanceToTravel = _agent.speed * timeInSeconds;
+
+        // Find the corner that the agent is likely to reach within the prediction time
+        int targetCornerIndex = closestCornerIndex;
+        float accumulatedDistance = 0;
+        while (targetCornerIndex < path.corners.Length - 1 && accumulatedDistance < distanceToTravel)
+        {
+            accumulatedDistance += Vector3.Distance(path.corners[targetCornerIndex], path.corners[targetCornerIndex + 1]);
+            targetCornerIndex++;
+        }
+
+        // Calculate the predicted position along the current path segment
+        Vector3 direction = (path.corners[targetCornerIndex] - path.corners[targetCornerIndex - 1]).normalized;
+        float remainingDistance = distanceToTravel - (accumulatedDistance - Vector3.Distance(path.corners[targetCornerIndex - 1], path.corners[targetCornerIndex]));
+        Vector3 predictedPosition = path.corners[targetCornerIndex - 1] + direction * remainingDistance;
+
+        return predictedPosition;
     }
 }
