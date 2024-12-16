@@ -25,7 +25,7 @@ public class TowerUpgradeDescription : MonoBehaviour
     private CurrentTower _currentTower;
 
     // Using bool, instead of unsubscribing directly, as SetInfo() happens before Start()
-    private bool _maxxed;
+    private bool _maxed;
 
     private void Start()
     {
@@ -67,7 +67,7 @@ public class TowerUpgradeDescription : MonoBehaviour
             upgradeButton.interactable = false;
             Destroy(costParent);
 
-            _maxxed = true;
+            _maxed = true;
 
             return;
         }
@@ -101,7 +101,7 @@ public class TowerUpgradeDescription : MonoBehaviour
 
     private void CheckButtonState()
     {
-        if (_maxxed) { return; }
+        if (_maxed) { return; }
 
         if (GameManager.Instance.GetPlayerGold() >= int.Parse(upgradeCost.text))
         {

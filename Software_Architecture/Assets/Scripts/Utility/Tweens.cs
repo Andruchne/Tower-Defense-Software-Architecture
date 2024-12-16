@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Self made tweens, using the LeanTween library
+/// Different classes use this, to do the same tween, e.g. TowerSlot, Tower, and Player (The Base)
+/// </summary>
+
 public class Tweens
 {
     public event Action OnTweenComplete;

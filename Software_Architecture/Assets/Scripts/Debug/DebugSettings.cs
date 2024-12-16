@@ -2,6 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Enables toggling debug states, using the inspector
+/// It publishes EventBus events, to notify about these debug changes
+/// </summary>
+
 public class DebugSettings : MonoBehaviour
 {
     [Range(0, 5)]

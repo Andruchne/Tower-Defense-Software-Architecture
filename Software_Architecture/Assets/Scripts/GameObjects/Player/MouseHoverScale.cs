@@ -13,10 +13,10 @@ public class MouseHoverScale : MonoBehaviour
     [SerializeField] private float scaleMultiplier = 1.2f;
     [SerializeField] private float tweenDuration = 0.3f;
 
-    private Transform currentHoveredObject = null;
+    private Transform _currentHoveredObject;
 
     // To store original scale of selectable transform
-    private Dictionary<Transform, Vector3> originalScales = new Dictionary<Transform, Vector3>(); 
+    private Dictionary<Transform, Vector3> _originalScales = new Dictionary<Transform, Vector3>(); 
 
     void Update()
     {
@@ -34,33 +34,33 @@ public class MouseHoverScale : MonoBehaviour
             Transform hitTransform = hit.transform;
 
             // If new object is hovered on
-            if (hitTransform != currentHoveredObject)
+            if (hitTransform != _currentHoveredObject)
             {
                 // Reset the previous object's scale
-                if (currentHoveredObject != null)
+                if (_currentHoveredObject != null)
                 {
-                    ResetScale(currentHoveredObject);
+                    ResetScale(_currentHoveredObject);
                 }
 
-                currentHoveredObject = hitTransform;
+                _currentHoveredObject = hitTransform;
 
                 // Store the original scale if not already stored
-                if (!originalScales.ContainsKey(currentHoveredObject))
+                if (!_originalScales.ContainsKey(_currentHoveredObject))
                 {
                     RemoveInvalidEntries();
-                    originalScales[currentHoveredObject] = currentHoveredObject.localScale;
+                    _originalScales[_currentHoveredObject] = _currentHoveredObject.localScale;
                 }
 
-                ScaleUp(currentHoveredObject);
+                ScaleUp(_currentHoveredObject);
             }
         }
         else
         {
             // If no object is hit, reset scale
-            if (currentHoveredObject != null)
+            if (_currentHoveredObject != null)
             {
-                ResetScale(currentHoveredObject);
-                currentHoveredObject = null;
+                ResetScale(_currentHoveredObject);
+                _currentHoveredObject = null;
             }
         }
     }
@@ -71,7 +71,7 @@ public class MouseHoverScale : MonoBehaviour
         List<Transform> entriesToRemove = new List<Transform>();
 
         // Check all entries
-        foreach (Transform transform in originalScales.Keys)
+        foreach (Transform transform in _originalScales.Keys)
         {
             if (transform == null)
             {
@@ -82,13 +82,13 @@ public class MouseHoverScale : MonoBehaviour
         // Remove invalid entries
         foreach (Transform invalid in entriesToRemove)
         {
-            originalScales.Remove(invalid);
+            _originalScales.Remove(invalid);
         }
     }
 
     private void ScaleUp(Transform target)
     {
-        Vector3 originalScale = originalScales[target];
+        Vector3 originalScale = _originalScales[target];
         LeanTween.scale(target.gameObject, 
             originalScale * scaleMultiplier, 
             tweenDuration).
@@ -97,7 +97,7 @@ public class MouseHoverScale : MonoBehaviour
 
     private void ResetScale(Transform target)
     {
-        if (originalScales.TryGetValue(target, out Vector3 originalScale))
+        if (_originalScales.TryGetValue(target, out Vector3 originalScale))
         {
             LeanTween.scale(target.gameObject, 
                 originalScale, 

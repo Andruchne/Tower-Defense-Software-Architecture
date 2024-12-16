@@ -1,5 +1,10 @@
 using UnityEngine;
 
+/// <summary>
+/// Script attached to sphere collider, which damages any ITargetable's entering
+/// It's set to AOE on default, turning into single target when _singleTarget is true
+/// </summary>
+
 public class ImpactDamage : MonoBehaviour
 {
     protected ParticleSystem[] _impactParticleSystems;

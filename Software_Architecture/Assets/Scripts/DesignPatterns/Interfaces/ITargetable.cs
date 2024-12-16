@@ -1,11 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Interface, used for attacking/targeting
+/// Any class which is supposed to be able to be targeted and hit, should implement this
+/// </summary>
 
 public interface ITargetable
 {
-    public event Action<ITargetable> OnTargetDestroyed;
+    event Action<ITargetable> OnTargetDestroyed;
 
     void Hit(float damage);
     void Defeated();

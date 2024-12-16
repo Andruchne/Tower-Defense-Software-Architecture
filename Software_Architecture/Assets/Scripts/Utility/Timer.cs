@@ -1,7 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Very handy timer class, to be able to use timer logic, without the need for recreate it in every script
+/// Technically, OnTimerRunning is not the prettiest event to have, as it is invoked in update
+/// This is necessary though, to have the time updated properly for the break timer for example
+/// </summary>
 
 public class Timer : MonoBehaviour
 {

@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Holds most basic logic for the game
+/// It handles the break timer between waves
+/// Scene loading logic is provided as well
+/// Mouse courser is also toggled on and off in here
+/// Getters for gold and wave state is also included
+/// </summary>
+
 public class GameManager : MonoBehaviour
 {
     [SerializeField] float timePerBreak = 60;
@@ -56,12 +64,6 @@ public class GameManager : MonoBehaviour
         SceneManager.sceneLoaded += SceneLoaded;
     }
 
-    private void SceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        _player = FindObjectOfType<Player>();
-        _waveManager = FindObjectOfType<WaveManager>();
-    }
-
     private void OnDestroy()
     {
         EventBus<OnLevelLoadedEvent>.OnEvent -= ToggleCursorState;
@@ -80,6 +82,12 @@ public class GameManager : MonoBehaviour
         }
 
         SceneManager.sceneLoaded -= SceneLoaded;
+    }
+
+    private void SceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        _player = FindObjectOfType<Player>();
+        _waveManager = FindObjectOfType<WaveManager>();
     }
 
     #region Level Management

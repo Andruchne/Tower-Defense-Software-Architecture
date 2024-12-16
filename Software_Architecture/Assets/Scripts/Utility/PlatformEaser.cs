@@ -38,7 +38,7 @@ public class PlatformEaser : MonoBehaviour
 
     void Start()
     {
-        Setup();
+        Initialize();
         SortPlatforms();
     }
 
@@ -53,7 +53,7 @@ public class PlatformEaser : MonoBehaviour
         EventBus<OnLevelFinishedEvent>.OnEvent -= RemovePlatforms;
     }
 
-    private void Setup()
+    private void Initialize()
     {
         // As these fields are static and values will stay even after restarting scene,
         // reset them completely on Setup()

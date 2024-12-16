@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Used to have the fade transition inbetween scenes
+/// </summary>
 
 public class Transitioner : MonoBehaviour
 {

@@ -25,7 +25,6 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     private TowerTypeSelection _towerTypeSelect;
 
     // To position menu and check if to remove preview
-    private Camera _camera;
     private GameObject _currentPreviewCanvas;
     private bool _removalActive;
 
@@ -37,7 +36,6 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         EventBus<OnGetGoldEvent>.OnEvent += CheckCostAndGold;
 
-        _camera = Camera.main;
         _towerTypeSelect = GetComponentInParent<TowerTypeSelection>();
         _button = GetComponent<ExtendedButton>();
 

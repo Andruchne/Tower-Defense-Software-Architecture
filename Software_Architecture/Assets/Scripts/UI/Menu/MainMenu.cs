@@ -1,12 +1,12 @@
 using UnityEngine;
 
+/// <summary>
+/// Logic for buttons in the Main Menu scene
+/// OnLevelUnloadedEvent is published to toggle Cursor to the right state
+/// </summary>
+
 public class MainMenu : MonoBehaviour
 {
-    private void Start()
-    {
-        //EventBus<OnLevelLoadedEvent>.Publish(new OnLevelLoadedEvent());
-    }
-
     public void SwitchToNextScene()
     {
         EventBus<OnLevelUnloadedEvent>.Publish(new OnLevelUnloadedEvent());

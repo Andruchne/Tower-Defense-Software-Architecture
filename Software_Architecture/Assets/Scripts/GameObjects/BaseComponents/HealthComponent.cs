@@ -2,6 +2,11 @@ using System;
 using System.ComponentModel;
 using UnityEngine;
 
+/// <summary>
+/// HealthComponent, able to be used by anyone who needs to have health
+/// It also holds a healthbar, which is displayed using the height as offset, to the actual position
+/// </summary>
+
 public class HealthComponent : MonoBehaviour
 {
     public event Action OnDeath;

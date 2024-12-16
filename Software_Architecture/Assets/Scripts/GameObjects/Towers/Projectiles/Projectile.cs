@@ -1,6 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+/// <summary>
+/// Projectile fired off by the tower
+/// The ProjectileMoveType decides how the projectile will move, to reach it's goal
+/// When reaching the goal, it instantiates an Impact prefab
+/// </summary>
 
 public class Projectile : MonoBehaviour
 {
@@ -33,7 +37,7 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    protected void Impact()
+    private void Impact()
     {
         if (impactPrefab != null)
         {
@@ -56,7 +60,7 @@ public class Projectile : MonoBehaviour
     }
 
     // Different move behaviour
-    public void MoveStraight(Vector3 targetPos, float duration)
+    private void MoveStraight(Vector3 targetPos, float duration)
     {
         Vector3 direction = (targetPos - transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -69,7 +73,7 @@ public class Projectile : MonoBehaviour
             .setOnComplete(() => { Impact(); });
     }
 
-    public void MoveCurved(Vector3 targetPos, float duration)
+    private void MoveCurved(Vector3 targetPos, float duration)
     {
         float curveHeight = 1.0f;
         Vector3 startPos = transform.position;

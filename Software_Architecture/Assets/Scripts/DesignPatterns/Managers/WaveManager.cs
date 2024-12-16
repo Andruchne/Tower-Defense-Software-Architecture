@@ -63,15 +63,15 @@ public class WaveManager : MonoBehaviour
         EventBus<OnPlayerDefeatedEvent>.OnEvent -= DeactivateWaves;
     }
 
+    private void Update()
+    {
+        CheckIfEnemiesDefeated();
+    }
+
     private void PlayerHUDLoaded(OnPlayerHUDLoaded onPlayerHUDLoaded)
     {
         // Keep UI up to date
         EventBus<OnUpdateCurrentWave>.Publish(new OnUpdateCurrentWave(1, levelWave.waves.Length));
-    }
-
-    private void Update()
-    {
-        CheckIfEnemiesDefeated();
     }
 
     private void CheckIfEnemiesDefeated()

@@ -1,5 +1,10 @@
 using System;
 
+/// <summary>
+/// Key part of the project script architecture
+/// It enables decoupled invoking and listening, for whichever event currently needed
+/// </summary>
+
 public abstract class Event { }
 
 // To subscribe: EventBus<EventClass>.OnEvent += Function;

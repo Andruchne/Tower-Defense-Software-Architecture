@@ -1,6 +1,11 @@
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Updates all current tower info, on the tower UI component for selecting tower
+/// The window appears when hovering over tower type, after clicking on TowerSlot
+/// </summary>
+
 public class TowerDescription : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI towerTypeText;

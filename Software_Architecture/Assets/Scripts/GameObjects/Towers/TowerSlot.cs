@@ -22,12 +22,8 @@ public class TowerSlot : MonoBehaviour
     [SerializeField] bool initializeAtStart;
     [SerializeField] TowerInfo tower2B;
 
-    // To position the menu correctly
-    private GameObject _currentMenuCanvas;
-
     private TowerTypeSelection _towerTypeSelect;
 
-    private bool _isMenuOpen;
     private MenuOpener _menuOpener;
 
     private Tweens _tween = new Tweens();
