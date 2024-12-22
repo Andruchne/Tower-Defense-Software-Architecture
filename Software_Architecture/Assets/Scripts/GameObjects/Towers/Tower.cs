@@ -50,6 +50,14 @@ public class Tower : MonoBehaviour
     private void Start()
     {
         _menuOpener = GetComponentInChildren<MenuOpener>();
+
+        if (_menuOpener == null)
+        {
+            Debug.LogError("Tower: No MenuOpener script attached to selectable object in prefab. Destroying Tower...");
+            Destroy(gameObject);
+            return;
+        }
+
         _menuOpener.OnMenuOpened += MenuOpened;
         _menuOpener.OnMenuClosed += MenuClosed;
     }

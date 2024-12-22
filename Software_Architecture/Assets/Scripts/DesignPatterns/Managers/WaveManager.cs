@@ -32,8 +32,9 @@ public class WaveManager : MonoBehaviour
     {
         if (levelWave == null)
         {
-            Debug.Log("WaveManager: No level provided to spawn waves. Destroying Manager...");
+            Debug.LogError("WaveManager: No level provided to spawn waves. Destroying Manager...");
             Destroy(gameObject);
+            return;
         }
 
         _timer = gameObject.AddComponent<Timer>();

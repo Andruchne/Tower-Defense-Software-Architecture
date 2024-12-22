@@ -80,6 +80,7 @@ public class DebugSettings : MonoBehaviour
     private void Start()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
+        StartCoroutine(DelayedInitialization());
     }
 
     private void OnDestroy()
@@ -103,6 +104,7 @@ public class DebugSettings : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         // Keep the values, also when restarting
+        EventBus<OnOneHitEnemies>.Publish(new OnOneHitEnemies(_oneHitEnemies));
         EventBus<OnInfiniteRiches>.Publish(new OnInfiniteRiches(_infiniteRiches));
         EventBus<OnImmediateLooser>.Publish(new OnImmediateLooser(_immediateLooser));
         EventBus<OnInvincibleBase>.Publish(new OnInvincibleBase(_invincibleBase));

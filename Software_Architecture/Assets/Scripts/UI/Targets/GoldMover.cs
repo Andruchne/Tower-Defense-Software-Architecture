@@ -24,6 +24,13 @@ public class GoldMover : MonoBehaviour
         _text = _goldToMove.GetChild(0).GetComponent<TextMeshProUGUI>();
         _image = _goldToMove.GetChild(1).GetComponent<Image>();
 
+        if (_text == null || _image == null)
+        {
+            Debug.LogError("GoldMover: Text or image component missing in gold prefab. Destroying gold visual...");
+            Destroy(gameObject);
+            return;
+        }
+
         _text.text = "+" + _goldAmount.ToString();
 
         UpdateTextPos();

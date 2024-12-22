@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4f717ffaa4d924eb6d5f42fb80b90d, type: 3}
   m_Name: Ranged
   m_EditorClassIdentifier: 
-  attackType: Ranged
+  attackType: Ranged (AOE)
   attackTypeDescription: Shoots arrows at a target, also damaging everything else
     in range
   projectile: {fileID: 1205004205397025059, guid: 4a00fb46a11e71741a590415ed7b19fc, type: 3}

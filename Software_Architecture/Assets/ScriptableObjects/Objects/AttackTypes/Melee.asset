@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4f717ffaa4d924eb6d5f42fb80b90d, type: 3}
   m_Name: Melee
   m_EditorClassIdentifier: 
-  attackType: MeleeAttack
+  attackType: MeleeAttack (Single)
   attackTypeDescription: Slashes a single target
   projectile: {fileID: 1205004205397025059, guid: cf66919540c23cc4b822fb4d78a3cc89, type: 3}

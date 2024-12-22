@@ -29,12 +29,27 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         _anim = GetComponent<Animator>();
 
+        if (_anim == null)
+        {
+            Debug.LogError("Enemy: No animator attached. Destroying enemy...");
+            Destroy(gameObject);
+            return;
+        }
+
         _defaultMoveSpeed = moveSpeed;
         _moveSpeedAlteredTimer = gameObject.AddComponent<Timer>();
         _moveSpeedAlteredTimer.Initialize(3);
         _moveSpeedAlteredTimer.OnTimerFinished += ResetSpeed;
 
         _healthComp = GetComponent<HealthComponent>();
+
+        if (_healthComp == null)
+        {
+            Debug.LogError("Enemy: No HealthComponent attached. Destroying enemy...");
+            Destroy(gameObject);
+            return;
+        }
+
         _healthComp.OnDeath += Defeated;
 
         // Get move behaviour and do null check

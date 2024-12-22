@@ -32,6 +32,13 @@ public class TowerSlot : MonoBehaviour
     {
         _menuOpener = GetComponent<MenuOpener>();
 
+        if (_menuOpener == null)
+        {
+            Debug.LogError("TowerSlot: MenuOpener script not attached to TowerSlot prefab. Destroying Slot...");
+            Destroy(gameObject);
+            return;
+        }
+
         _menuOpener.OnMenuOpened += GetTypeSelection;
         _menuOpener.OnMenuClosed += RemoveTypeSelection;
 

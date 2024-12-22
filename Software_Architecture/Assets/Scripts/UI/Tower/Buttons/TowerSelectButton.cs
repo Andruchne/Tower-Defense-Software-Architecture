@@ -37,7 +37,20 @@ public class TowerSelectButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
         EventBus<OnGetGoldEvent>.OnEvent += CheckCostAndGold;
 
         _towerTypeSelect = GetComponentInParent<TowerTypeSelection>();
+        if (_towerTypeSelect == null)
+        {
+            Debug.LogError("TowerSelectButton: Unable to get TowerTypeSelection script. Destroying Button...");
+            Destroy(gameObject);
+            return;
+        }
+
         _button = GetComponent<ExtendedButton>();
+        if (_button == null)
+        {
+            Debug.LogError("TowerSelectButton: Unable to get ExtendedButton script. Destroying Button...");
+            Destroy(gameObject);
+            return;
+        }
 
         costText.text = towerInfo.cost[0].ToString();
 

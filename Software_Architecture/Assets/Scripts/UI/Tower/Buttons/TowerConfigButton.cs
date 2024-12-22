@@ -22,10 +22,28 @@ public class TowerConfigButton : MonoBehaviour
     private void Start()
     {
         _towerConfigSelect = GetComponentInParent<TowerConfigSelection>();
+
+        if (_towerConfigSelect == null)
+        {
+            Debug.LogError("TowerConfigButton: Not able to get TowerConfigSelection. Destroying button script...");
+            Destroy(this);
+            return;
+        }
+
         _camera = Camera.main;
 
         // Not the prettiest way of doing it, but this way, we are informed about the current cost of the tower
-        _currentTower = Useful.GetXthParentTransform(transform, 3).GetComponent<TowerUpgradeDescription>().GetCurrentTower();
+        try
+        {
+            _currentTower = Useful.GetXthParentTransform(transform, 3).GetComponent<TowerUpgradeDescription>().GetCurrentTower();
+        }
+        catch (System.Exception)
+        {
+            Debug.LogError("TowerConfigButton: Not able to aquire current tower from TowerUpgradeDescription script. Destroying button script...");
+            Destroy(this);
+            return;
+        }
+
         _refundAmount = _currentTower.info.cost[_currentTower.currentTier] / 2;
     }
 
@@ -83,7 +101,7 @@ public class TowerConfigButton : MonoBehaviour
 
     public void UpgradeClicked()
     {
-        EventBus<OnWithdrawGoldEvent>.Publish(new OnWithdrawGoldEvent(_currentTower.info.cost[_currentTower.currentTier]));
+        EventBus<OnWithdrawGoldEvent>.Publish(new OnWithdrawGoldEvent(_currentTower.info.cost[_currentTower.currentTier + 1]));
         _towerConfigSelect.InvokeUpgrade();
         Destroy(_towerConfigSelect.gameObject);
     }

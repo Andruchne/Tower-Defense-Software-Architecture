@@ -18,6 +18,14 @@ public class NavMeshMovement : MonoBehaviour, IMoveBehaviour
     void Start()
     {
         _agent = GetComponent<NavMeshAgent>();
+
+        if (_agent == null)
+        {
+            Debug.LogError("NavMeshMovement: No NavMeshAgent attached. Destroying mover...");
+            Destroy(gameObject);
+            return;
+        }
+
         _destination = GameObject.FindWithTag("Destination").transform.position;
     }
 

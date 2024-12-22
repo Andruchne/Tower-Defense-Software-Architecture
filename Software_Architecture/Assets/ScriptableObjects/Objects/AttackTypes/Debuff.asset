@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b4f717ffaa4d924eb6d5f42fb80b90d, type: 3}
   m_Name: Debuff
   m_EditorClassIdentifier: 
-  attackType: Debuff
+  attackType: Debuff (AOE)
   attackTypeDescription: Applies slow debuff to an area
   projectile: {fileID: 6904886525283140304, guid: bee87a3b008416842b59c7d9efe0f058, type: 3}

@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     {
         if (showCursorAtStart) { ToggleCursorState(new OnLevelLoadedEvent()); }
 
+        // No need to do null checks here, as safety checks are in place at the use cases
         _player = FindObjectOfType<Player>();
         _waveManager = FindObjectOfType<WaveManager>();
 
@@ -62,6 +63,11 @@ public class GameManager : MonoBehaviour
         _breakTimer.OnTimerFinished += StopBreak;
 
         SceneManager.sceneLoaded += SceneLoaded;
+    }
+
+    private void Update()
+    {
+        ExitToMainMenu();
     }
 
     private void OnDestroy()
@@ -91,6 +97,21 @@ public class GameManager : MonoBehaviour
     }
 
     #region Level Management
+
+    private void ExitToMainMenu()
+    {
+        // To exit back to Main Menu
+        if (Input.GetKeyDown(KeyCode.Escape) && SceneManager.GetActiveScene().buildIndex != 0)
+        {
+            // Activate cursor, if leaving back to menu
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                ToggleCursorState(new OnLevelFinishedEvent());
+            }
+
+            LoadSceneSpecific(0);
+        }
+    }
 
     private void UpdateTimeHUD()
     {

@@ -81,8 +81,23 @@ public class Player : MonoBehaviour
         _timer.Initialize(5, false);
         _timer.OnTimerFinished += FinishGame;
 
+        if (playerHUD == null)
+        {
+            Debug.LogError("Player: No playerHUD prefab attached. Destroying player...");
+            Destroy(gameObject);
+            return;
+        }
+
         Instantiate(playerHUD);
-        playerHUD.GetComponent<PlayerHUD>().Initialize(startGold);
+
+        try
+        {
+            playerHUD.GetComponent<PlayerHUD>().Initialize(startGold);
+        }
+        catch (System.Exception)
+        {
+            Debug.LogError("Player: Given HUD prefab has no PlayerHUD script attached. Destroying player...");
+        }
 
         _oldGold = startGold;
         Gold = startGold;
