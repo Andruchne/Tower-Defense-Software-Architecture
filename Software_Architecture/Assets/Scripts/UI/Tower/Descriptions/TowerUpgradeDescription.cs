@@ -11,9 +11,13 @@ public class TowerUpgradeDescription : MonoBehaviour
     [SerializeField] TextMeshProUGUI towerTierText;
     [SerializeField] TextMeshProUGUI towerTypeText;
 
+    // Current Tower values
     [SerializeField] TextMeshProUGUI[] oldTexts;
+    // New Tower values, if upgraded
     [SerializeField] TextMeshProUGUI[] newTexts;
+    // Centered text
     [SerializeField] TextMeshProUGUI[] finalNumberTexts;
+    // To hide the arrows, as soon as max upgrade tier is reached
     [SerializeField] TextMeshProUGUI[] arrowTexts;
 
     [SerializeField] ExtendedButton upgradeButton;
