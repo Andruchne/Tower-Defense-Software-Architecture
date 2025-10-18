@@ -109,10 +109,10 @@ RectTransform:
   m_Father: {fileID: 4439292005370430666}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.04047917, y: 0.103889935}
-  m_AnchorMax: {x: 0.2, y: 0.15188994}
-  m_AnchoredPosition: {x: -53.69995, y: 70.9}
-  m_SizeDelta: {x: -109, y: -4}
+  m_AnchorMin: {x: 0.039520834, y: 0.16877986}
+  m_AnchorMax: {x: 0.2, y: 0.21322015}
+  m_AnchoredPosition: {x: -52.69995, y: -0.10003662}
+  m_SizeDelta: {x: -111, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4470156441508522145
 CanvasRenderer:
@@ -1451,10 +1451,10 @@ RectTransform:
   m_Father: {fileID: 4439292005370430666}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.038520835, y: 0.048889928}
-  m_AnchorMax: {x: 0.2, y: 0.09677986}
-  m_AnchoredPosition: {x: 0.5, y: 71.900024}
-  m_SizeDelta: {x: -1.112297, y: 0}
+  m_AnchorMin: {x: 0.039520834, y: 0.11277986}
+  m_AnchorMax: {x: 0.2, y: 0.16077986}
+  m_AnchoredPosition: {x: -0.5, y: -0.099975586}
+  m_SizeDelta: {x: 0.88770294, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &4167633081618575257
 MonoBehaviour:
@@ -1852,7 +1852,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da6b8969b8a8e90498747f88c97d77bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioMixer: {fileID: 24100000, guid: 5006547c299983f4b90fcca1a1634f9e, type: 2}
   healthIcon: {fileID: 3738838674789565593}
   timeHolder: {fileID: 697928930550603777}
   timeText: {fileID: 2201150542329883258}
@@ -2815,10 +2814,10 @@ RectTransform:
   m_Father: {fileID: 899553470431980401}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -918, y: -480.6}
-  m_SizeDelta: {x: 60, y: 60}
+  m_AnchorMin: {x: 0.0065208334, y: 0.045330215}
+  m_AnchorMax: {x: 0.039520834, y: 0.098559715}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5420004000684310019
 CanvasRenderer:
