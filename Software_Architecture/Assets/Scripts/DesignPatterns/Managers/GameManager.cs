@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 
 /// <summary>
@@ -13,6 +14,8 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] float timePerBreak = 60;
     [SerializeField] bool showCursorAtStart;
+
+    [SerializeField] AudioMixer audioMixer;
 
     private Player _player;
     private WaveManager _waveManager;
@@ -110,6 +113,12 @@ public class GameManager : MonoBehaviour
             }
 
             LoadSceneSpecific(0);
+
+            // Reset values
+            SetGameSpeed(1.0f);
+            SetMasterVolume(1.0f);
+            _breakTimer.ResetTimer(false);
+            EventBus<OnStopBreakTime>.Publish(new OnStopBreakTime());
         }
     }
 
@@ -203,6 +212,19 @@ public class GameManager : MonoBehaviour
     private void SetOneShot(OnOneHitEnemies onOneHitEnemies)
     {
         _oneShotTargets = onOneHitEnemies.state;
+    }
+
+    public void SetGameSpeed(float speed)
+    {
+        Time.timeScale = speed;
+        Time.fixedDeltaTime = 0.02f * Time.timeScale;
+    }
+
+    public void SetMasterVolume(float volume)
+    {
+        // Taking values from 0 to 1
+        float dB = Mathf.Log10(Mathf.Max(volume, 0.0001f)) * 20.0f;
+        audioMixer.SetFloat("Volume", dB);
     }
 
     #endregion

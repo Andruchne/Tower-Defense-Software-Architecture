@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 7364411746218320691}
   - component: {fileID: 7364411746218320688}
   - component: {fileID: 219504990976990968}
+  - component: {fileID: -7671585585669081259}
   m_Layer: 6
   m_Name: Slime
   m_TagString: Untagged
@@ -204,6 +205,9 @@ MonoBehaviour:
   power: 1
   moveSpeed: 0.5
   rewardAmount: 100
+  attackSound: {fileID: 8300000, guid: fe62203d0eb637d45b1fca90fc0ed0cc, type: 3}
+  hitSound: {fileID: 8300000, guid: 623cf6f7c099e8e489c4a9f56ed7be4f, type: 3}
+  deathSound: {fileID: 8300000, guid: 018dd26aab0c038449911f975a002a41, type: 3}
 --- !u!114 &219504990976990968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +223,26 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 7567282972511865042, guid: 284948eca79fb344b8f9f3bfc3eda68a, type: 3}
   maxHealth: 4
   _height: 45
+--- !u!114 &-7671585585669081259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7364926863940747986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.2
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 1
+  randomPitchRange: 0.1
 --- !u!1 &7365074053149038590
 GameObject:
   m_ObjectHideFlags: 0

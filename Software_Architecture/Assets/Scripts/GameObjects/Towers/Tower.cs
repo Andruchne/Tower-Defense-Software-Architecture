@@ -22,6 +22,11 @@ public class Tower : MonoBehaviour
     [Description("To instantiate slot, in case this tower gets destroyed")]
     [SerializeField] GameObject towerSlot;
 
+    [SerializeField] AudioClip buildSound;
+    [SerializeField] AudioClip destroySound;
+    [SerializeField] AudioClip groundMoveSound;
+    [SerializeField] AudioClip[] throwSounds;
+
     private Tweens _tween = new Tweens();
 
     private Projectile.ProjectileMoveType _shootType;
@@ -44,11 +49,16 @@ public class Tower : MonoBehaviour
 
     private bool _active = true;
 
+    private SoundPlayer _soundPlayer;
+
     // For Unit Testing
     private bool _leaveOutClickable;
 
     private void Start()
     {
+        _soundPlayer = GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = gameObject.AddComponent<SoundPlayer>(); }
+
         _menuOpener = GetComponentInChildren<MenuOpener>();
 
         if (_menuOpener == null)
@@ -60,6 +70,13 @@ public class Tower : MonoBehaviour
 
         _menuOpener.OnMenuOpened += MenuOpened;
         _menuOpener.OnMenuClosed += MenuClosed;
+
+        // Don't play sounds when on Unit Test
+        if (!_leaveOutClickable)
+        {
+            PlayBuildSound();
+            PlayGroundMoveSound();
+        }
     }
 
     private void OnDestroy()
@@ -154,11 +171,14 @@ public class Tower : MonoBehaviour
 
         projectile.Initialize(_currentTower);
         projectile.Shoot(targetPos, _shootType, projectileReachDuration);
-        
+
+        PlayThrowSound();
     }
 
     private void UpgradeTower()
     {
+        PlayBuildSound();
+
         _currentTower.currentTier += 1;
         int tier = _currentTower.currentTier;
 
@@ -188,6 +208,9 @@ public class Tower : MonoBehaviour
 
     private void SubmergeTower()
     {
+        PlayDestroySound();
+        PlayGroundMoveSound();
+
         _active = false;
         Destroy(_menuOpener);
 
@@ -203,6 +226,8 @@ public class Tower : MonoBehaviour
 
     private void DestroyTower()
     {
+        _soundPlayer.Stop();
+
         _tween.OnTweenComplete -= DestroyTower;
 
         // Calculate position before submerging
@@ -302,6 +327,8 @@ public class Tower : MonoBehaviour
     // For the spawn Effect
     private void ReactivateClickable()
     {
+        _soundPlayer.Stop();
+
         // Don't reactivate, if wave is ongoing
         if (GameManager.Instance.GetWaveActiveState() || _leaveOutClickable) { return; }
 
@@ -356,5 +383,44 @@ public class Tower : MonoBehaviour
     public void SetClickable(bool clickable)
     {
         _leaveOutClickable = true;
+    }
+
+    private void PlayBuildSound()
+    {
+        if (buildSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { buildSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.PlayOneShot();
+        }
+    }
+
+    private void PlayDestroySound()
+    {
+        if (destroySound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { destroySound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.PlayOneShot();
+        }
+    }
+
+    private void PlayGroundMoveSound()
+    {
+        if (groundMoveSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { groundMoveSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
+    }
+
+    private void PlayThrowSound()
+    {
+        if (throwSounds.Length > 0)
+        {
+            _soundPlayer.ReplaceSound(throwSounds);
+            _soundPlayer.Play();
+        }
     }
 }

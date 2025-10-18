@@ -9720,6 +9720,8 @@ GameObject:
   - component: {fileID: 7750853977139984563}
   - component: {fileID: 7750853977139984562}
   - component: {fileID: 7750853977139984565}
+  - component: {fileID: 106458332135923806}
+  - component: {fileID: 8080656294250761467}
   m_Layer: 0
   m_Name: SF_Rainbow
   m_TagString: Untagged
@@ -14592,6 +14594,40 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &106458332135923806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750853977139984564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454e1c8d877f249429055ce1ca3dd0ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fireworkShot: {fileID: 8300000, guid: 91e2c512f01d52f4096093327a1cb580, type: 3}
+  fireworkExplode: {fileID: 8300000, guid: e27d5076da1dff748a8b8aef885b969a, type: 3}
+--- !u!114 &8080656294250761467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7750853977139984564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.2
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 0
+  randomPitchRange: 0.1
 --- !u!1 &7750853977312398390
 GameObject:
   m_ObjectHideFlags: 0

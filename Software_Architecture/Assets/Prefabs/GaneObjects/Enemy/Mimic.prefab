@@ -321,6 +321,7 @@ GameObject:
   - component: {fileID: 8610108989882923869}
   - component: {fileID: 8610108989882923868}
   - component: {fileID: 8610108989882923859}
+  - component: {fileID: -927067507474270960}
   m_Layer: 6
   m_Name: Mimic
   m_TagString: Untagged
@@ -425,6 +426,9 @@ MonoBehaviour:
   power: 1
   moveSpeed: 0.25
   rewardAmount: 600
+  attackSound: {fileID: 8300000, guid: 6c2552923569eee419b557e54c81f7b9, type: 3}
+  hitSound: {fileID: 8300000, guid: 702a7a77b06308f4ca1f79828dddd30d, type: 3}
+  deathSound: {fileID: 8300000, guid: 1555291f2b5a6e647bed4c6329e66762, type: 3}
 --- !u!114 &8610108989882923868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -462,6 +466,26 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
+--- !u!114 &-927067507474270960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7616083469569098638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.1
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 1
+  randomPitchRange: 0.1
 --- !u!1 &7616083469569098640
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,10 @@ public class MenuOpener : MonoBehaviour
 
     [SerializeField] GameObject menuPrefab;
 
+    [Space(5)]
+
+    [SerializeField] AudioClip clickedSound;
+
     private Camera _camera;
     private GameObject _currentMenuCanvas;
 
@@ -31,6 +35,8 @@ public class MenuOpener : MonoBehaviour
     // Used to switch between selectable and unselectable states
     private LayerMask _selectableIndex;
 
+    private SoundPlayer _soundPlayer;
+
     private void Start()
     {
         _camera = Camera.main;
@@ -40,6 +46,9 @@ public class MenuOpener : MonoBehaviour
         EventBus<OnStopBreakTime>.OnEvent += DeactivateMenu;
 
         EventBus<OnCameraMoved>.OnEvent += MoveUIWithCamera;
+
+        _soundPlayer = GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = gameObject.AddComponent<SoundPlayer>(); }
     }
 
     private void OnDestroy()
@@ -113,6 +122,8 @@ public class MenuOpener : MonoBehaviour
                 OnMenuOpened?.Invoke();
                 SetSelectability(false);
 
+                PlayClickedSound();
+
                 UpdateMenuPos();
             }
         }
@@ -120,6 +131,16 @@ public class MenuOpener : MonoBehaviour
         {
             RemoveCanvas();
             SetSelectability(true);
+        }
+    }
+
+    private void PlayClickedSound()
+    {
+        if (clickedSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { clickedSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
         }
     }
 

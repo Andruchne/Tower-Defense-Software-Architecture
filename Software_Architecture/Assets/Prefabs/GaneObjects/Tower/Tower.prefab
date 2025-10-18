@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2789835548394351318}
   - component: {fileID: 2789835548394351305}
   - component: {fileID: 2789835548394351304}
+  - component: {fileID: -8636239511824613872}
   m_Layer: 7
   m_Name: Tower
   m_TagString: Untagged
@@ -50,6 +51,13 @@ MonoBehaviour:
   riseTime: 1
   emergeParticle: {fileID: 232837754777989916, guid: f5550ed9133fdc040882dbbdbacbe927, type: 3}
   towerSlot: {fileID: 8082155167885454540, guid: d493c86d69d18e644b50dbcf8cf51971, type: 3}
+  buildSound: {fileID: 8300000, guid: 03c02dc67589cfe40bc275313cef0d33, type: 3}
+  destroySound: {fileID: 8300000, guid: 01420edb76089de44b0c6191317d4c8c, type: 3}
+  groundMoveSound: {fileID: 8300000, guid: bea2b3ecb2340c64b9e402ab91cb9446, type: 3}
+  throwSounds:
+  - {fileID: 8300000, guid: aec87db2c848a8d45b365b9b1ba5bedd, type: 3}
+  - {fileID: 8300000, guid: 510034224d1d19b4ba43160cc7795273, type: 3}
+  - {fileID: 8300000, guid: da1b09493be3e0b46b79c29111ab06f4, type: 3}
 --- !u!135 &2789835548394351304
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -63,6 +71,26 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 1.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-8636239511824613872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2789835548394351307}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.15
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 1
+  randomPitchRange: 0.2
 --- !u!1 &6555472734142122688
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,3 +150,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuPrefab: {fileID: 4020273585476954721, guid: 90e7c1b640f989f40b97339ab9739c68, type: 3}
+  clickedSound: {fileID: 8300000, guid: 46bb470f5fc51fb4b91852feadb52107, type: 3}

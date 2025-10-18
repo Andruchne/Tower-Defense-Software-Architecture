@@ -274,6 +274,7 @@ GameObject:
   - component: {fileID: 8214176318656814442}
   - component: {fileID: 2794539411528411957}
   - component: {fileID: 5733426258704754982}
+  - component: {fileID: -4036412386262700699}
   m_Layer: 6
   m_Name: Beholder
   m_TagString: Untagged
@@ -402,6 +403,9 @@ MonoBehaviour:
   power: 1
   moveSpeed: 1
   rewardAmount: 150
+  attackSound: {fileID: 8300000, guid: 517c7d9bf61f5ff469349923ad210899, type: 3}
+  hitSound: {fileID: 8300000, guid: 4b00fa6d5f3cbb642b91975fc7653cf0, type: 3}
+  deathSound: {fileID: 8300000, guid: 159c92af6453d9d4f8b38ade39520ef9, type: 3}
 --- !u!114 &5733426258704754982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +419,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotateSpeed: 1.5
+--- !u!114 &-4036412386262700699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7234699454089206411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.1
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 1
+  randomPitchRange: 0.1
 --- !u!1 &7234699454089206413
 GameObject:
   m_ObjectHideFlags: 0

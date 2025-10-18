@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9000721602750739513}
   - component: {fileID: 9000721602750739514}
   - component: {fileID: 7540399992485486925}
+  - component: {fileID: 3101271463388334842}
   m_Layer: 3
   m_Name: TowerSlot
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8082155167885454540}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -116,6 +117,9 @@ MonoBehaviour:
   towerPrefab: {fileID: 2789835548394351307, guid: e4b6eecb23ac956489f0d1a0f22085b9, type: 3}
   emergeParticle: {fileID: 232837754777989916, guid: f5550ed9133fdc040882dbbdbacbe927, type: 3}
   riseTime: 1
+  groundMoveSound: {fileID: 8300000, guid: bea2b3ecb2340c64b9e402ab91cb9446, type: 3}
+  initializeAtStart: 0
+  tower2B: {fileID: 0}
 --- !u!114 &7540399992485486925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,3 +133,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuPrefab: {fileID: 4726502673128555710, guid: 68c9f917fdf0b784cb7143c0407f0318, type: 3}
+  clickedSound: {fileID: 8300000, guid: 3d06eca5e49161c47b8d1cafe19e948b, type: 3}
+--- !u!114 &3101271463388334842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8082155167885454540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.2
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 0
+  randomPitchRange: 0.5

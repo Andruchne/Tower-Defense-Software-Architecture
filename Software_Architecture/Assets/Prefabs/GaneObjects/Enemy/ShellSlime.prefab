@@ -582,6 +582,7 @@ GameObject:
   - component: {fileID: 4850629665101608618}
   - component: {fileID: 4850629665101608660}
   - component: {fileID: 4850629665101608663}
+  - component: {fileID: -4072974205827957634}
   m_Layer: 6
   m_Name: ShellSlime
   m_TagString: Untagged
@@ -688,6 +689,9 @@ MonoBehaviour:
   power: 1
   moveSpeed: 0.5
   rewardAmount: 150
+  attackSound: {fileID: 8300000, guid: fe62203d0eb637d45b1fca90fc0ed0cc, type: 3}
+  hitSound: {fileID: 8300000, guid: f29bc2e82bf80e94a82cb2335c7f22c7, type: 3}
+  deathSound: {fileID: 8300000, guid: c50c5108b54a11546bafd1f25fc2fd15, type: 3}
 --- !u!114 &4850629665101608660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -723,6 +727,26 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 0
+--- !u!114 &-4072974205827957634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4851942000122604137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21f4972239fdb284a9c657de979ef3a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds: []
+  playOnAwake: 0
+  volume: 0.1
+  pitch: 1
+  autoVolumeTransition: 0
+  transitionTime: 1
+  randomizePitch: 1
+  randomPitchRange: 0.1
 --- !u!1 &4851946952145907537
 GameObject:
   m_ObjectHideFlags: 0

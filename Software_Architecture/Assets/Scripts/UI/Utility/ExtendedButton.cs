@@ -8,8 +8,23 @@ using TMPro; // For IPointerEnterHandler and IPointerExitHandler
 /// A normal UIButton, which also applies the button color effects to its children that hold an image object.
 /// Additionally, it detects pointer hover events.
 /// </summary>
-public class ExtendedButton : Button
+public class ExtendedButton : Button, IPointerEnterHandler
 {
+    [SerializeField] AudioClip hoverSound;
+    [SerializeField] AudioClip clickSound;
+
+    private SoundPlayer _soundPlayer;
+
+    protected override void Start()
+    {
+        base.Start();
+
+        _soundPlayer = GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = gameObject.AddComponent<SoundPlayer>(); }
+
+        onClick.AddListener(PlayClickSound);
+    }
+
     protected override void DoStateTransition(SelectionState state, bool instant)
     {
         // Apply all the standard effects to the button
@@ -84,5 +99,34 @@ public class ExtendedButton : Button
 
             text.color = textColor;
         }
+    }
+
+    public override void OnPointerEnter(PointerEventData eventData)
+    {
+        base.OnPointerEnter(eventData);
+
+        if (hoverSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { hoverSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
+    }
+
+    private void PlayClickSound()
+    {
+        if (clickSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { clickSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        onClick.RemoveListener(PlayClickSound);
     }
 }

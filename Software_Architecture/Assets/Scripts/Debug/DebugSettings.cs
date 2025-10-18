@@ -9,9 +9,6 @@ using UnityEngine.SceneManagement;
 
 public class DebugSettings : MonoBehaviour
 {
-    [Range(0, 5)]
-    [SerializeField] float gameSpeed = 1;
-
     [SerializeField] bool oneHitEnemies;
     [SerializeField] bool infiniteRiches;
     [SerializeField] bool immediateLooser;
@@ -116,9 +113,5 @@ public class DebugSettings : MonoBehaviour
         InfiniteRiches = infiniteRiches;
         ImmediateLooser = immediateLooser;
         InvincibleBase = invincibleBase;
-
-        // Set game speed
-        Time.timeScale = gameSpeed;
-        Time.fixedDeltaTime = 0.02f * Time.timeScale;
     }
 }

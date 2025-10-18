@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 /// <summary>
@@ -16,9 +17,15 @@ public class PlayerHUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI timeText;
     [SerializeField] TextMeshProUGUI goldText;
     [SerializeField] TextMeshProUGUI waveText;
+    [SerializeField] TextMeshProUGUI speedText;
+
+    private string _lastTime;
+    private SoundPlayer _soundPlayer;
 
     private void Start()
     {
+        _soundPlayer = GetComponent<SoundPlayer>();
+
         EventBus<OnUpdateCurrentHealth>.OnEvent += UpdateHealth;
         EventBus<OnUpdateCurrentTime>.OnEvent += UpdateTime;
         EventBus<OnUpdateCurrentGold>.OnEvent += UpdateCurrentGold;
@@ -43,6 +50,17 @@ public class PlayerHUD : MonoBehaviour
         UpdateCurrentGold(new OnUpdateCurrentGold(startGold));
     }
 
+    public void SetSpeedMultiplier(float value)
+    {
+        GameManager.Instance.SetGameSpeed(value);
+        speedText.text = "Speed: " + value.ToString("F2") + "x";
+    }
+
+    public void SetMasterSoundVolume(float value)
+    {
+        GameManager.Instance.SetMasterVolume(value);
+    }
+
     private void UpdateHealth(OnUpdateCurrentHealth onUpdateCurrentHealth)
     {
         healthIcon.fillAmount = onUpdateCurrentHealth.currentPercent;
@@ -60,6 +78,9 @@ public class PlayerHUD : MonoBehaviour
 
         string time = string.Format("{0:0}:{1:00}", minutes, seconds);
         timeText.text = time;
+
+        if (time != _lastTime) { _soundPlayer.Play(); }
+        _lastTime = time;
     }
 
     private void UpdateWave(OnUpdateCurrentWave onUpdateCurrentWave)

@@ -15,6 +15,10 @@ public class Enemy : MonoBehaviour, ITargetable
     [SerializeField] float moveSpeed = 1;
     [SerializeField] int rewardAmount = 100;
 
+    [SerializeField] AudioClip attackSound;
+    [SerializeField] AudioClip hitSound;
+    [SerializeField] AudioClip deathSound;
+
     public event Action<ITargetable> OnTargetDestroyed;
     private float _defaultMoveSpeed;
     private Timer _moveSpeedAlteredTimer;
@@ -25,8 +29,12 @@ public class Enemy : MonoBehaviour, ITargetable
     private Animator _anim;
     private bool _destinationReached;
 
+    private SoundPlayer _soundPlayer;
+
     private void Start()
     {
+        _soundPlayer = GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = gameObject.AddComponent<SoundPlayer>(); }
         _anim = GetComponent<Animator>();
 
         if (_anim == null)
@@ -82,6 +90,8 @@ public class Enemy : MonoBehaviour, ITargetable
     {
         if (!_destinationReached && _moveBehaviour.GetDestinationReached())
         {
+            PlayAttackSound();
+
             OnTargetDestroyed?.Invoke(this);
             _healthComp.RemoveUI();
 
@@ -111,6 +121,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Hit(float damage)
     {
+        PlayHitSound();
+
         if (_healthComp.Health <= 0) { return; }
 
         if (!GameManager.Instance.GetOneShotTargets()) { _healthComp.Health -= damage; }
@@ -136,6 +148,8 @@ public class Enemy : MonoBehaviour, ITargetable
 
     public void Defeated()
     {
+        PlayDeathSound();
+
         _healthComp.RemoveUI();
         OnTargetDestroyed?.Invoke(this);
         _anim.SetTrigger("Die");
@@ -164,6 +178,36 @@ public class Enemy : MonoBehaviour, ITargetable
             Instantiate(dustParticle, particlePos, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
         else { Debug.LogError("Tower Prefab: No dustParticle to instantiate"); }
+    }
+
+    private void PlayHitSound()
+    {
+        if (hitSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { hitSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
+    }
+
+    private void PlayDeathSound()
+    {
+        if (deathSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { deathSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
+    }
+
+    private void PlayAttackSound()
+    {
+        if (attackSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { attackSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
     }
 
     // Triggered by animation event

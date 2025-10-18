@@ -9,14 +9,19 @@ using UnityEngine;
 
 public class MouseHoverScale : MonoBehaviour
 {
-    [SerializeField] private LayerMask layerMask;
-    [SerializeField] private float scaleMultiplier = 1.2f;
-    [SerializeField] private float tweenDuration = 0.3f;
+    [SerializeField] LayerMask layerMask;
+    [SerializeField] float scaleMultiplier = 1.2f;
+    [SerializeField] float tweenDuration = 0.3f;
+
+    [Space(5)]
+
+    [SerializeField] AudioClip hoveredSound;
 
     private Transform _currentHoveredObject;
+    private SoundPlayer _soundPlayer;
 
     // To store original scale of selectable transform
-    private Dictionary<Transform, Vector3> _originalScales = new Dictionary<Transform, Vector3>(); 
+    private Dictionary<Transform, Vector3> _originalScales = new Dictionary<Transform, Vector3>();
 
     void Update()
     {
@@ -51,6 +56,7 @@ public class MouseHoverScale : MonoBehaviour
                     _originalScales[_currentHoveredObject] = _currentHoveredObject.localScale;
                 }
 
+                PlayHoverSound(hitTransform);
                 ScaleUp(_currentHoveredObject);
             }
         }
@@ -62,6 +68,19 @@ public class MouseHoverScale : MonoBehaviour
                 ResetScale(_currentHoveredObject);
                 _currentHoveredObject = null;
             }
+        }
+    }
+
+    private void PlayHoverSound(Transform trans)
+    {
+        _soundPlayer = trans.GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = trans.gameObject.AddComponent<SoundPlayer>(); }
+
+        if (hoveredSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { hoveredSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
         }
     }
 

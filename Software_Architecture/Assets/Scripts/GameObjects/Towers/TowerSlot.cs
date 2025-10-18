@@ -17,6 +17,8 @@ public class TowerSlot : MonoBehaviour
     [Description("Is only used when emerge is called on this slot")]
     [SerializeField] float riseTime = 1.0f;
 
+    [SerializeField] AudioClip groundMoveSound;
+
     [Space]
     [Header("Unit Test Settings [ Leave empty if not needed ]")]
     [SerializeField] bool initializeAtStart;
@@ -28,8 +30,14 @@ public class TowerSlot : MonoBehaviour
 
     private Tweens _tween = new Tweens();
 
+    private SoundPlayer _soundPlayer;
+
+    private bool _emerging;
+
     private void Start()
     {
+        _soundPlayer = GetComponent<SoundPlayer>();
+        if (_soundPlayer == null) { _soundPlayer = gameObject.AddComponent<SoundPlayer>(); }
         _menuOpener = GetComponent<MenuOpener>();
 
         if (_menuOpener == null)
@@ -43,6 +51,8 @@ public class TowerSlot : MonoBehaviour
         _menuOpener.OnMenuClosed += RemoveTypeSelection;
 
         if (initializeAtStart) { TowerSelected(tower2B); }
+
+        if (_emerging) { PlayGroundMoveSound(); }
     }
 
     private void OnDestroy()
@@ -92,6 +102,9 @@ public class TowerSlot : MonoBehaviour
 
     private void ReactivateClickable()
     {
+        _emerging = false;
+        _soundPlayer.Stop();
+
         _menuOpener.SetClickable(true);
         _tween.OnTweenComplete -= ReactivateClickable;
     }
@@ -119,6 +132,7 @@ public class TowerSlot : MonoBehaviour
             if (_menuOpener == null) { return; }
         }
         _menuOpener.SetClickable(false);
+        _emerging = true;
     }
 
     private void InstantiateDirtParticle(float riseTime)
@@ -137,5 +151,15 @@ public class TowerSlot : MonoBehaviour
             Instantiate(emergeParticle, transform.position, Quaternion.Euler(-90.0f, 0.0f, 0.0f));
         }
         else { Debug.LogError("Tower Prefab: No emergeParticle to instantiate"); }
+    }
+
+    private void PlayGroundMoveSound()
+    {
+        if (groundMoveSound != null)
+        {
+            AudioClip[] sounds = new AudioClip[1] { groundMoveSound };
+            _soundPlayer.ReplaceSound(sounds);
+            _soundPlayer.Play();
+        }
     }
 }
